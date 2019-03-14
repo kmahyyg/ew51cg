@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="68a2ce44-bf99-4832-9db9-aa1a456b0cc1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/new_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/new_index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/update.min.js" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -57,8 +58,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/new_index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="84" column="64" selection-start-line="84" selection-start-column="64" selection-end-line="84" selection-end-column="64" />
+            <state relative-caret-position="218">
+              <caret line="85" column="50" lean-forward="true" selection-start-line="85" selection-start-column="50" selection-end-line="85" selection-end-column="50" />
               <folding>
                 <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -74,6 +75,11 @@
         <option value="HTML File" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>js</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -162,12 +168,12 @@
       <workItem from="1552543273408" duration="1471000" />
       <workItem from="1552544892336" duration="2256000" />
       <workItem from="1552561761129" duration="6125000" />
-      <workItem from="1552570042004" duration="2935000" />
+      <workItem from="1552570042004" duration="3098000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12924000" />
+    <option name="totallyTimeSpent" value="13087000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="36" width="1920" height="1045" extended-state="6" />
@@ -246,7 +252,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/update.min.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="358">
+          <caret line="2" column="6924" selection-start-line="2" selection-start-column="6924" selection-end-line="2" selection-end-column="6945" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -255,8 +262,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/new_index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="84" column="64" selection-start-line="84" selection-start-column="64" selection-end-line="84" selection-end-column="64" />
+        <state relative-caret-position="218">
+          <caret line="85" column="50" lean-forward="true" selection-start-line="85" selection-start-column="50" selection-end-line="85" selection-end-column="50" />
           <folding>
             <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#0;n#main#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
