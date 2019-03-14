@@ -1,11 +1,117 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html class="full-height" lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Jumping to Homework 1</title>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <title>Web 前端攻城师作业</title>
+    <style>
+        .view {
+            background: url("newidxbg.jpg") no-repeat center center;
+            background-size: cover;
+        }
+
+        html,
+        body,
+        header,
+        .view {
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
-<h1>正在跳转到 作业 01, 更新时间为：2019-03-14 21:51:04，此页面仅作占位使用</h1>
-<script>setTimeout(function (){window.location.replace("/01/index.html");}, 5000);</script>
+
+<!--Main Navigation-->
+<header>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark indigo">
+        <a class="navbar-brand" href="#"><strong>Meow~</strong></a>
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Homework 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Homework 2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.kmahyyg.xyz/about/"> My Profile </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="view intro-2">
+        <div class="full-bg-img">
+            <div class="mask rgba-black-light flex-center">
+                <div class="container text-center white-text">
+                    <div class="white-text text-center wow fadeInUp">
+                        <h1>Web 前端攻城师 - 作业引导页面</h1>
+                        <h3>2019 年春季学期 - Made with love by Patrick Young</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</header>
+<!--Main Navigation-->
+
+<!--Main Layout And Copyright Notification-->
+<main class="text-center py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p align="justify" class="font-weight-bold" style="text-align: center;">Copyright (C) 2019 Patrick
+                    Young. Source code can be get from my <a href="https://github.com/kmahyyg/ew51cg" rel="noopener"
+                                                             target="_blank">GitHub repository</a> under AGPLv3 license.
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+<!--Main Layout And Copyright Notification-->
+<!-- Detect outdated browsers -->
+<script>
+    var $buoop = {required: {e: -3, f: -2, o: 0, s: -1, c: -3}, insecure: true, unsupported: true, api: 2019.03};
+
+    function $buo_f() {
+        var e = document.createElement("script");
+        e.src = "//browser-update.org/update.min.js";
+        document.body.appendChild(e);
+    }
+    try {
+        document.addEventListener("DOMContentLoaded", $buo_f, false)
+    } catch (e) {
+        window.attachEvent("onload", $buo_f)
+    }
+</script>
+<!-- Import third party framework as a helper -->
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.7.0/css/all.min.css"
+      integrity="sha256-r9xr8t6YH/19Nwt29E51gFcvGX774hS5z6QAXRidjq4=" rel="stylesheet">
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css"
+      integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" rel="stylesheet">
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css"
+      integrity="sha256-hJpmKTwvW2JIl3muMuKAt7NEVgB9KSpqAZX+KI5XZGw=" rel="stylesheet">
+<script crossorigin="anonymous"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha256-CjSoeELFOcH0/uxWu6mC/Vlrc1AARqbm/jiiImDGV3s="
+        src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha256-WMtqeK/CBLcWXpR8lly85ilu4OWH+6s+EsDStjeOkAQ="
+        src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha256-RyKFOSKnuKFSYAyJlfeHdb8ljBAbLJOSh9Bz8pzhhkY="
+        src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+<!-- Put those scripts at the end to avoid some Uncaught TypeError -->
 </body>
 </html>
