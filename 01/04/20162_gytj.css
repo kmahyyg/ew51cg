@@ -1,27 +1,27 @@
-body{
+body {
     background-color: bisque;
 }
 
-.image{
-   
-   position: absolute;
+.image {
+
+    position: absolute;
     left: 350px;
-   
-   height: 300px;
+
+    height: 300px;
     margin: 100px;
 }
 
 
-.image2{
-   
-    position: absolute;
-     left: 350px;
-    
-    height: 300px;
-     margin: 100px;
- }
+.image2 {
 
-img{
+    position: absolute;
+    left: 350px;
+
+    height: 300px;
+    margin: 100px;
+}
+
+img {
     margin: 5px;
     opacity: 0.8;
 }
