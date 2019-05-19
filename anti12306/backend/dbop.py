@@ -1,37 +1,56 @@
 #!/usr/bin/env python3
 # -*- encoding:utf-8 -*-
 
-from sqlalchemy import Column, String, create_engine, Boolean, Integer
+from sqlalchemy import Column, String, create_engine, Boolean, Float, UniqueConstraint, CheckConstraint, or_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.sql.sqltypes import TIMESTAMP
+from sqlalchemy.sql.sqltypes import TIMESTAMP, SMALLINT
 from apikey import sqlconn
+from time import time
 
 Base = declarative_base()
 
-class userdbmsg(Base):
+
+class User(Base):
     # SQL_TABLE_DATA_STRUCTURE
-    # ID = Primary, Auto_increment, INT(12), NOT OVERRIDE
-    # ISGROUP = Boolean. If false, groupid = '0'
-    # GROUPID,USERID = VARCHAR(20)
-    # MESSAGE = VARCHAR(800)
-    # TIMESTAMP = Current_Timestamp(6), TIMESTAMP(6), NOT OVERRIDE
 
-    __tablename__ = 'qqchat'
+    __tablename__ = 'users'
 
-    id = Column(Integer(), primary_key=True)
-    isgroup = Column(Boolean())
-    groupid = Column(String(20))
-    userid = Column(String(20))
-    message = Column(String(800))
-    timestamp = Column(TIMESTAMP(6))
+    username = Column(String(20), primary_key=True)
+    password = Column(String(64), nullable=False)
+    is_vip = Column(Boolean, nullable=False, default=False)
+    balance = Column(Float, nullable=False, default=0.0)
+    apikey = Column(String(64), nullable=False)
+    break_law = Column(Boolean, nullable=False, default=False)
+    salt = Column(String(16), nullable=False)
+    total_topup = Column(Float, nullable=False, default=0.0)
+
+
+class Session(Base):
+    __tablename__ = 'sessions'
+    username = Column(String(20), primary_key=True)
+    usrtoken = Column(String(80), nullable=False)
+    logged = Column(TIMESTAMP, default=int(time()), nullable=False)
+    UniqueConstraint('username', 'usrtoken', name='uka')
+
+
+class Order(Base):
+    __tablename__ = 'orders'
+    orderid = Column(String(80), primary_key=True)
+    username = Column(String(20), nullable=False)
+    submitat = Column(TIMESTAMP, nullable=False, default=int(time()))
+    amount = Column(Float, nullable=False)
+    gateway = Column(String(10), nullable=False, default='alipay')
+    CheckConstraint(or_(gateway == 'alipay', gateway == 'py_pay'))
+    status = Column(SMALLINT(1), nullable=False, default=1)
+    # 1 = created, 0 = success, 2 = failed, 3 = fraud
 
 
 def create_db_conn():
     engine = create_engine(sqlconn, pool_pre_ping=True)
     DBSession = sessionmaker(bind=engine)
-    ses3sion = DBSession()
-    return ses3sion
+    session = DBSession()
+    return session
 
 
 def db_exit(session):
@@ -40,10 +59,11 @@ def db_exit(session):
     return 0
 
 
-try:
-    dbsess.add(adatah)
-    dbsess.commit()
-except InvalidRequestError as e:
-    print(e)
-    dbsess.rollback()
-    dbsess.commit()
+# try:
+#     dbsess.add(adatah)
+#     dbsess.commit()
+# except InvalidRequestError as e:
+#     print(e)
+#     dbsess.rollback()
+#     dbsess.commit()
+#

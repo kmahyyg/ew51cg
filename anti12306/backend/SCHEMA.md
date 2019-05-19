@@ -50,7 +50,6 @@ create table upload (
     eventid varchar(80) not null,
     chnchars int not null,
     upltime timestamp not null default current_timestamp(),
-    filename varchar(80) not null,
     status tinyint(1) not null default 1, /* 1=created, 0=success, 2=failed, 3=fraud*/
     primary key (eventid),
     unique key ukb (username, eventid),
