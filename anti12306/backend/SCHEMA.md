@@ -52,7 +52,7 @@ create table upload (
     eventid varchar(80) not null,
     chnchars int not null,
     upltime int(11) not null default unix_timestamp(current_timestamp),
-    status tinyint(1) not null default 1, /* 1=created, 0=success, 2=failed, 3=fraud*/
+    status tinyint(1) not null default 1, /* 1=created, 0=success, 2=failed, 3=fraud, 4=waiting_review */
     primary key (eventid),
     unique key ukb (username, eventid),
     constraint usb foreign key (username) references users (username)

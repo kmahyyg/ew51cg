@@ -20,9 +20,14 @@
 # Filename: main.py
 #
 
+REPLAY_TIMEOUT = 15
+
 from flask import Flask, jsonify, request, make_response
 from dbop import *
 from respmodel import *
+from userop import *
+from uplevent import *
+from payment import *
 
 app = Flask(__name__)
 
@@ -45,6 +50,19 @@ def batch_ocr2Text():
     # photo is a base64 encoded string
     photo_b64 = request.form['photo']
     photo_time = request.form['timestamp']
+    # Credential check
+    try:
+        usr_token = request.headers['X-User-Token']
+    except KeyError:
+        usr_token = None
+    try:
+        usr_apikey = request.headers['X-APIKEY']
+    except KeyError:
+        usr_apikey = None
+    if usr_apikey is None:
+        usr_secret = usr_token
+    else:
+        usr_secret = usr_apikey
 
 
 @app.route('/api/user/logout', methods=['GET'])
@@ -67,7 +85,18 @@ def checkOrd():
 
 @app.route('/api/user/checkBalance', methods=['GET'])
 def batch_balance():
-    usr_token = request.headers['X-User-Token']
+    try:
+        usr_token = request.headers['X-User-Token']
+    except KeyError:
+        usr_token = None
+    try:
+        usr_apikey = request.headers['X-APIKEY']
+    except KeyError:
+        usr_apikey = None
+    if usr_apikey is None:
+        usr_secret = usr_token
+    else:
+        usr_secret = usr_apikey
 
 
 @app.route('/api/user/getUser', methods=['GET'])
@@ -78,11 +107,41 @@ def dashboard_usr():
 @app.route('/api/report/error', methods=['POST'])
 def incorrect_recg():
     # incorrect recognition, call maintainers and go to check
-    eventid = request.form['eventid']
-    timestamp = request.form['timestamp']
+    try:
+        eventid = request.form['eventid']
+        timestamp = request.form['timestamp']
+        if int(time()) - timestamp > REPLAY_TIMEOUT:
+            raise KeyError
+    except KeyError:
+        return make_response(jsonify(errResponse(-1, "Invalid Data!")), 400)
+    try:
+        usr_token = request.headers['X-User-Token']
+    except KeyError:
+        usr_token = None
+    try:
+        usr_apikey = request.headers['X-APIKEY']
+    except KeyError:
+        usr_apikey = None
+
+    if usr_apikey is None and usr_token is None:
+        return make_response(jsonify(errResponse(-1, "No valid credential")), 403)
+    elif usr_apikey is None:
+        usr_secret = usr_token
+    else:
+        usr_secret = usr_apikey
+    if check_credential(usr_secret):
+        try:
+            mark_as_waiting(eventid)
+            return make_response(jsonify(errResponse(0, "Received, waiting for manual review.")), 200)
+        except IndexError:
+            return make_response(jsonify(errResponse(-2, "Your eventid is invalid")), 400)
+    else:
+        return make_response(jsonify(errResponse(-1, "No valid credential")), 403)
 
 
 @app.route('/api/admin/review', methods=['GET'])
+def review_report():
+    pass
 
 
 @app.route('/api/payment/callback', methods=['POST'])
@@ -91,9 +150,12 @@ def recv_payment_callback():
     # the callback after payment successfully finished.
     #
     # Always successful for test.
-    return 0
+    return make_response(jsonify(errResponse(-1, "Under Construction")), 200)
 
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_exit(db_session)
+
+
+app.run(host='0.0.0.0', port=8080, debug=True)
