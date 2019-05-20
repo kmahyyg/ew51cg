@@ -2,7 +2,7 @@
 
 Database schema:
 
-```mariadb
+```sql
 set autocommit = 0;
 start transaction;
 set time_zone = "+00:00";
@@ -19,12 +19,14 @@ create table users (
     primary key (username)
 )engine = innodb default charset = utf8mb4 collate = utf8mb4_unicode_ci;
 
+/* is_vip: admin 9, user 0, vip 1 */
+
 create trigger usrpwd before insert on users
-    for each row begin set new.password = md5(new.password + new.salt);
+    for each row begin set new.password = md5(concat(new.password,new.salt));
 end;
 
 create trigger usrpwd2 before update on users
-    for each row begin set new.password = md5(new.password + new.salt);
+    for each row begin set new.password = md5(concat(new.password,new.salt));
 end;
 
 create trigger vip_change before update on users
@@ -39,7 +41,7 @@ create trigger vip_change before update on users
 create table sessions (
     username varchar(20) not null,
     usrtoken varchar(80) not null,
-    logged timestamp not null default current_timestamp,
+    logged int(11) not null default unix_timestamp(current_timestamp),
     primary key (username),
     unique key uka (username, usrtoken),
     constraint usa foreign key (username) references users (username)
@@ -49,7 +51,7 @@ create table upload (
     username varchar(20) not null,
     eventid varchar(80) not null,
     chnchars int not null,
-    upltime timestamp not null default current_timestamp(),
+    upltime int(11) not null default unix_timestamp(current_timestamp),
     status tinyint(1) not null default 1, /* 1=created, 0=success, 2=failed, 3=fraud*/
     primary key (eventid),
     unique key ukb (username, eventid),
@@ -61,7 +63,7 @@ create table upload (
 create table orders (
     orderid varchar(80) not null,
     username varchar(20) not null,
-    submitat timestamp not null default current_timestamp(),
+    submitat int(11) not null default unix_timestamp(current_timestamp),
     amount float not null,
     gateway varchar(10) not null,
     status tinyint(1) not null,

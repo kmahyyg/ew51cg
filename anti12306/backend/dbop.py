@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- encoding:utf-8 -*-
 
-from sqlalchemy import Column, String, create_engine, Boolean, Float, UniqueConstraint, CheckConstraint, or_
+from sqlalchemy import Column, String, create_engine, Boolean, Float, UniqueConstraint, CheckConstraint, or_, Integer
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.sql.sqltypes import TIMESTAMP, SMALLINT
+from sqlalchemy.sql.sqltypes import SMALLINT
 from apikey import sqlconn
 from time import time
 
@@ -12,13 +12,12 @@ Base = declarative_base()
 
 
 class User(Base):
-    # SQL_TABLE_DATA_STRUCTURE
-
     __tablename__ = 'users'
-
-    username = Column(String(20), primary_key=True)
+    username = Column(String(20), primary_key=True, unique=True)
     password = Column(String(64), nullable=False)
-    is_vip = Column(Boolean, nullable=False, default=False)
+    is_vip = Column(Integer, nullable=False, default=False)
+    # is_vip, vip user badge(1), admin badge(9)
+    # is_vip, normal user(0)
     balance = Column(Float, nullable=False, default=0.0)
     apikey = Column(String(64), nullable=False)
     break_law = Column(Boolean, nullable=False, default=False)
@@ -30,7 +29,7 @@ class Session(Base):
     __tablename__ = 'sessions'
     username = Column(String(20), primary_key=True)
     usrtoken = Column(String(80), nullable=False)
-    logged = Column(TIMESTAMP, default=int(time()), nullable=False)
+    logged = Column(Integer, default=int(time()))
     UniqueConstraint('username', 'usrtoken', name='uka')
 
 
@@ -38,12 +37,21 @@ class Order(Base):
     __tablename__ = 'orders'
     orderid = Column(String(80), primary_key=True)
     username = Column(String(20), nullable=False)
-    submitat = Column(TIMESTAMP, nullable=False, default=int(time()))
+    submitat = Column(Integer, default=int(time()))
     amount = Column(Float, nullable=False)
     gateway = Column(String(10), nullable=False, default='alipay')
     CheckConstraint(or_(gateway == 'alipay', gateway == 'py_pay'))
-    status = Column(SMALLINT(1), nullable=False, default=1)
+    status = Column(SMALLINT, nullable=False, default=1)
     # 1 = created, 0 = success, 2 = failed, 3 = fraud
+
+
+class UploadEvent(Base):
+    __tablename__ = 'upload'
+    username = Column(String(20), nullable=False)
+    eventid = Column(String(80), primary_key=True)
+    chnchars = Column(Integer, nullable=False)
+    UniqueConstraint('username', 'eventid', name='ukb')
+    upltime = Column(Integer, default=int(time()))
 
 
 def create_db_conn():
@@ -59,6 +67,7 @@ def db_exit(session):
     return 0
 
 
+#
 # try:
 #     dbsess.add(adatah)
 #     dbsess.commit()

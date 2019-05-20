@@ -20,5 +20,7 @@
 # Filename: bankcomm.py
 
 
-def comm_tensow():
-    return "Under Construction"
+def comm_tensor():
+    # Communicate with tensorflow backend, return Tuple(CHN char result, len(CHN))
+    dataresult = (None, 0)
+    return dataresult
