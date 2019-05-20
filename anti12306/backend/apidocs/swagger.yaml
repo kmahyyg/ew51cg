@@ -269,32 +269,6 @@ paths:
             description: "User token not included or param is null."
             schema:
               $ref: '#/definitions/ErrResponse'
-  /user/checkBalance:
-    get:
-      tags:
-        - "dev"
-      summary: "Get current user balance"
-      security:
-        - api_key: []
-      produces:
-        - "application/json"
-      responses:
-        200:
-          description: "Current user's account balance"
-          schema:
-            type: object
-            properties:
-              username:
-                type: string
-                description: "Current username"
-              balance:
-                type: number
-                format: float
-                description: "Current account balance"
-        403:
-          description: "User token not included."
-          schema:
-            $ref: '#/definitions/ErrResponse'
   /startOCR:
     post:
       tags:

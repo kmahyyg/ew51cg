@@ -71,4 +71,9 @@ def check_batcredential(usrreq):
             data = (None, -2)
             return data
 
+
 def get_userstats(authresp):
+    if authresp[0] is not None:
+        return db_session.query(User).filter_by(User.username == authresp[0]).one()
+    else:
+        raise LookupError("The user stats error occured: Internal Error!")

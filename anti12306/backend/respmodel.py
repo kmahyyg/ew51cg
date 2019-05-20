@@ -59,7 +59,7 @@ def userStats(username, is_vip, apikey, balance, illegal):
 
 
 def orderResponse(retcode, orderid):
-    if isinstance(retcode,int):
+    if isinstance(retcode, int):
         datadict = {"retcode": retcode, "orderid": orderid}
         return datadict
     else:
@@ -80,7 +80,7 @@ def afterPayResponse(orderid, timestamp, amount, resp):
 
 
 def afterRecognitionResponse(eventid, retcode, retmsg, balance):
-    if isinstance(retcode,int) and isinstance(balance, float):
+    if isinstance(retcode, int) and isinstance(balance, float):
         datadict = {
             "eventid": eventid,
             "retcode": retcode,
@@ -90,4 +90,3 @@ def afterRecognitionResponse(eventid, retcode, retmsg, balance):
         return datadict
     else:
         raise AssertionError("Illegal data input!")
-
