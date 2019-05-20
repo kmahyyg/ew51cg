@@ -182,9 +182,9 @@ def cronjob():
                 VIP_identify = corresponding_user.is_vip
                 refund_cost = 0.0
                 if VIP_identify > 0:
-                    refund_cost = event.chnchars * 0.7 * 15
+                    refund_cost = event.chnchars * 0.8 * 8
                 else:
-                    refund_cost = event.chnchars * 1.0 * 15
+                    refund_cost = event.chnchars * 1.0 * 8
                 corresponding_user.balance += refund_cost
                 db_session.commit()
         else:
@@ -195,7 +195,7 @@ def cronjob():
 
 @app.route('/api/payment/callback', methods=['POST'])
 def recv_payment_callback():
-    # TODO: UPDATE THE STATUS OF ORDER TO THE CORRESPONDING ONE
+    # TODO: UPDATE THE STATUS OF ORDER TO THE CORRESPONDING ONE (future)
     return make_response(jsonify(errResponse(-1, "Under Construction")), 200)
 
 

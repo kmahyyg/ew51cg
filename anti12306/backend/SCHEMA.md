@@ -88,9 +88,9 @@ create trigger topupd after update on orders
 commit;
 ```
 
-1 RMB = 100 Coins, VIP got 30% discount.
+1 RMB = 100 Coins, VIP got 20% discount.
 
-Each char costs 15 coins.
+Each char costs 8 coins.
 
 # About Web Design
 
