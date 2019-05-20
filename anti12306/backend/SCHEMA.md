@@ -15,11 +15,11 @@ create table users (
     apikey varchar(80) not null,
     break_law tinyint(1) not null default 0,
     salt varchar(16) not null,
-    total_topup float not null default 0.0,
+    topup_amount float not null default 0.0,
     primary key (username)
 )engine = innodb default charset = utf8mb4 collate = utf8mb4_unicode_ci;
 
-/* is_vip: admin 9, user 0, vip 1 */
+/* is_vip: admin 9, user 0, vip 8 */
 
 create trigger usrpwd before insert on users
     for each row begin set new.password = md5(concat(new.password,new.salt));
@@ -32,7 +32,7 @@ end;
 create trigger vip_change before update on users
     for each row
     begin
-        if total_topup > 100 then set new.is_vip = 1;
+        if new.topup_amount > 100 then set new.is_vip = 8;
         end if;     /* the vip status will change at the next time you recharge. */
     end;
 
@@ -52,7 +52,8 @@ create table upload (
     eventid varchar(80) not null,
     chnchars int not null,
     upltime int(11) not null default unix_timestamp(current_timestamp),
-    status tinyint(1) not null default 1, /* 1=created, 0=success, 2=failed, 3=fraud, 4=waiting_review */
+    status tinyint(1) not null default 0, 
+    /* 1=created, 0=success, 2=failed, 3=fraud, 4=waiting_review */
     primary key (eventid),
     unique key ukb (username, eventid),
     constraint usb foreign key (username) references users (username)
@@ -66,7 +67,8 @@ create table orders (
     submitat int(11) not null default unix_timestamp(current_timestamp),
     amount float not null,
     gateway varchar(10) not null,
-    status tinyint(1) not null,
+    status tinyint(1) not null default 1,
+    /* 1=created, 0=success, 2=failed, 3=fraud, 4=waiting_review */
     constraint gateway_contract check (gateway = 'alipay' or gateway = 'py_pay'),
     constraint usc foreign key (username) references users (username),
     primary key (orderid),

@@ -7,6 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.sqltypes import SMALLINT
 from apikey import sqlconn
 from time import time
+from secrets import token_hex as tokengen
 
 Base = declarative_base()
 
@@ -21,8 +22,9 @@ class User(Base):
     balance = Column(Float, nullable=False, default=0.0)
     apikey = Column(String(64), nullable=False)
     break_law = Column(Boolean, nullable=False, default=False)
-    salt = Column(String(16), nullable=False)
-    total_topup = Column(Float, nullable=False, default=0.0)
+    # salt should be generated using token_hex
+    salt = Column(String(16), nullable=False, default=str(tokengen(8)))
+    topup_amount = Column(Float, nullable=False, default=0.0)
 
 
 class Session(Base):
@@ -52,6 +54,7 @@ class UploadEvent(Base):
     chnchars = Column(Integer, nullable=False)
     UniqueConstraint('username', 'eventid', name='ukb')
     upltime = Column(Integer, default=int(time()))
+    status = Column(SMALLINT, nullable=False, default=0)
 
 
 def create_db_conn():

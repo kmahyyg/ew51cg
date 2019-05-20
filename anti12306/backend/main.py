@@ -31,6 +31,7 @@ from payment import *
 
 app = Flask(__name__)
 
+global db_session
 db_session = create_db_conn()
 
 
@@ -51,18 +52,7 @@ def batch_ocr2Text():
     photo_b64 = request.form['photo']
     photo_time = request.form['timestamp']
     # Credential check
-    try:
-        usr_token = request.headers['X-User-Token']
-    except KeyError:
-        usr_token = None
-    try:
-        usr_apikey = request.headers['X-APIKEY']
-    except KeyError:
-        usr_apikey = None
-    if usr_apikey is None:
-        usr_secret = usr_token
-    else:
-        usr_secret = usr_apikey
+
 
 
 @app.route('/api/user/logout', methods=['GET'])
@@ -85,18 +75,14 @@ def checkOrd():
 
 @app.route('/api/user/checkBalance', methods=['GET'])
 def batch_balance():
-    try:
-        usr_token = request.headers['X-User-Token']
-    except KeyError:
-        usr_token = None
-    try:
-        usr_apikey = request.headers['X-APIKEY']
-    except KeyError:
-        usr_apikey = None
-    if usr_apikey is None:
-        usr_secret = usr_token
+    user_auth = check_batcredential(request)
+    if user_auth[1] >= 0:
+        current_user = get_userstats(user_auth)
+        return make_response(jsonify(
+            userStats()
+        ))
     else:
-        usr_secret = usr_apikey
+        return make_response(jsonify(errResponse(-1, "No valid credential")), 403)
 
 
 @app.route('/api/user/getUser', methods=['GET'])
@@ -112,36 +98,25 @@ def incorrect_recg():
         timestamp = request.form['timestamp']
         if int(time()) - timestamp > REPLAY_TIMEOUT:
             raise KeyError
-    except KeyError:
+    except:
         return make_response(jsonify(errResponse(-1, "Invalid Data!")), 400)
-    try:
-        usr_token = request.headers['X-User-Token']
-    except KeyError:
-        usr_token = None
-    try:
-        usr_apikey = request.headers['X-APIKEY']
-    except KeyError:
-        usr_apikey = None
-
-    if usr_apikey is None and usr_token is None:
+    user_auth = check_batcredential(request)
+    if user_auth[1] == -1:
         return make_response(jsonify(errResponse(-1, "No valid credential")), 403)
-    elif usr_apikey is None:
-        usr_secret = usr_token
-    else:
-        usr_secret = usr_apikey
-    if check_credential(usr_secret):
-        try:
-            mark_as_waiting(eventid)
+    elif user_auth[1] == -2:
+        return make_response(jsonify(errResponse(-1, "No valid credential")), 403)
+    elif user_auth[1] >= 0:
+        # Authenticate passed
+        event = mark_as_waiting(eventid, user_auth[0])
+        if event == 0:
             return make_response(jsonify(errResponse(0, "Received, waiting for manual review.")), 200)
-        except IndexError:
-            return make_response(jsonify(errResponse(-2, "Your eventid is invalid")), 400)
-    else:
-        return make_response(jsonify(errResponse(-1, "No valid credential")), 403)
+        else:
+            return make_response(jsonify(errResponse(-2, "Your eventid is invalid or Server Error.")), 400)
 
 
 @app.route('/api/admin/review', methods=['GET'])
 def review_report():
-    pass
+    user_auth = check_batcredential(request)
 
 
 @app.route('/api/payment/callback', methods=['POST'])
@@ -158,4 +133,4 @@ def shutdown_session(exception=None):
     db_exit(db_session)
 
 
-app.run(host='0.0.0.0', port=8080, debug=True)
+app.run(host='0.0.0.0', port=8080, debug=False)

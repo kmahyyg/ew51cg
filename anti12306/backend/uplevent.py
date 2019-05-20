@@ -3,6 +3,29 @@
 
 from uuid import uuid4 as uuidgen
 from dbop import *
+from sqlalchemy.exc import *
 
-def mark_as_waiting(eventid):
+global db_session
+
+
+def mark_as_waiting(eventid, username):
+    try:
+        suspecious_event = db_session.query(UploadEvent).filter_by(UploadEvent.eventid == eventid).one()
+        if suspecious_event.username == username:
+            suspecious_event.status = 4
+            try:
+                db_session.commit()
+            except InvalidRequestError as e:
+                print(e)
+                db_session.rollback()
+                db_session.commit()
+                return -1
+            return 0
+        else:
+            return -2
+    except:
+        return -1
+
+
+def review_event(eventid, user_auth_response):
     pass
