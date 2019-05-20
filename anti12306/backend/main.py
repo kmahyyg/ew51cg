@@ -37,11 +37,13 @@ db_session = create_db_conn()
 
 @app.route('/api/user/getHistory', methods=['GET'])
 def get_recog_history():
+    # TODO TO-BE-FINISHED
     pass
 
 
 @app.route('/api/user/login', methods=['POST'])
 def userlog():
+    # TODO TO-BE-FINISHED
     # extract user login form
     usercreds_nm = request.form['username']
     usercreds_pw = request.form['password']
@@ -52,7 +54,7 @@ def userlog():
 
 @app.route('/api/startOCR', methods=['POST'])
 def batch_ocr2Text():
-    #TODO: Get user balance, must > 150 coins
+    # TODO: Get user balance, must > 150 coins
     # Get OCR result of uploaded photo
     # photo is a base64 encoded string
     photo_b64 = request.form['photo']
@@ -62,6 +64,7 @@ def batch_ocr2Text():
 
 @app.route('/api/user/logout', methods=['GET'])
 def logout():
+    # TODO TO-BE-FINISHED
     pass
 
 
@@ -71,6 +74,7 @@ def createOrd():
     order_usr = orderData['username']
     order_amount = float(orderData['amount'])
     order_paygate = orderData['payment']
+    # TODO TO-BE-FINISHED
 
 
 @app.route('/api/user/checkOrder', methods=['GET'])
@@ -152,7 +156,7 @@ def admin_approve():
         return make_response(jsonify(errResponse(-1, "No valid credential")), 403)
 
 
-@app.route('/api/cron', methods=['POST'])
+@app.route('/api/cron', methods=['OPTIONS'])
 def cronjob():
     # This is used for daily job, cleanup user session and refund
     authed_site = request.headers["Origin"]
@@ -191,6 +195,7 @@ def cronjob():
 
 @app.route('/api/payment/callback', methods=['POST'])
 def recv_payment_callback():
+    # TODO: UPDATE THE STATUS OF ORDER TO THE CORRESPONDING ONE
     return make_response(jsonify(errResponse(-1, "Under Construction")), 200)
 
 
