@@ -29,6 +29,7 @@ from userop import *
 from uplevent import *
 from payment import *
 from datetime import datetime
+from bankcomm import *
 
 app = Flask(__name__)
 
@@ -98,23 +99,59 @@ def userlog():
 
 @app.route('/api/startOCR', methods=['POST'])
 def batch_ocr2Text():
-    #TODO
     # NOT DETECT REPLAY HERE: JUST LET USER PAY FOR WHAT THEY HAVE DONE!
-    usr_photo = request.form['photo']
+    try:
+        usr_photo = request.form['photo']  # Already encoded in base64.
+        usr_photo = usr_photo[22:]  # remove the prefix of dataurl: "data:image/png;base64,"
+    except IndexError:
+        return make_response(jsonify(errResponse(-1, "Photo invalid.")), 400)
     user_auth = check_batcredential(request)
     if user_auth[1] >= 0:
         usrname = user_auth[0]
+        cur_evntid = str(uuidgen())
         cur_usrobj = db_session.query(User).filter_by(User.username == usrname).one()
-        if cur_usrobj.balance < 150 and cur_usrobj.is_vip != 9:
-            return make_response(jsonify(errResponse(-3, "Insufficient balance.")), 400)
-        elif cur_usrobj == 8 and cur_usrobj.balance > 150:
-
+        if cur_usrobj == 8 and cur_usrobj.balance > 150:
+            result = comm_tensor(usr_photo)
+            save_photo(usr_photo, cur_evntid)
+            newEvent = UploadEvent(usrname, cur_evntid, result[1], result[0])
+            db_session.add(newEvent)
+            db_session.commit()
+            if result[1] != 0:
+                cur_usrobj.balance -= result[1] * 8 * 0.8
+                db_session.commit()
+                return make_response(jsonify(afterRecognitionResponse(
+                    eventid=cur_evntid, retcode=0, retmsg=result[0], balance=cur_usrobj.balance
+                )), 200)
+            else:
+                return make_response(jsonify(errResponse(-5, "Recognition failed.")), 500)
         elif cur_usrobj == 0 and cur_usrobj.balance > 150:
-
+            result = comm_tensor(usr_photo)
+            save_photo(usr_photo, cur_evntid)
+            newEvent = UploadEvent(usrname, cur_evntid, result[1], result[0])
+            db_session.add(newEvent)
+            db_session.commit()
+            if result[1] != 0:
+                cur_usrobj.balance -= result[1] * 8
+                db_session.commit()
+                return make_response(jsonify(afterRecognitionResponse(
+                    eventid=cur_evntid, retcode=0, retmsg=result[0], balance=cur_usrobj.balance
+                )), 200)
+            else:
+                return make_response(jsonify(errResponse(-5, "Recognition failed.")), 500)
         elif cur_usrobj.is_vip == 9:
-
+            result = comm_tensor(usr_photo)
+            save_photo(usr_photo, cur_evntid)
+            newEvent = UploadEvent(usrname, cur_evntid, result[1], result[0])
+            db_session.add(newEvent)
+            db_session.commit()
+            if result[1] != 0:
+                return make_response(jsonify(afterRecognitionResponse(
+                    eventid=cur_evntid, retcode=0, retmsg=result[0], balance=cur_usrobj.balance
+                )), 200)
+            else:
+                return make_response(jsonify(errResponse(-5, "Recognition failed.")), 500)
         else:
-            return make_response(jsonify(-5, "Server Internal Error"), 500)
+            return make_response(jsonify(errResponse(-3, "Insufficient account balance.")), 400)
     else:
         return make_response(jsonify(errResponse(-1, "Permission Denied")), 403)
 

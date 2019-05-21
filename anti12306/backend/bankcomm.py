@@ -19,8 +19,18 @@
 #
 # Filename: bankcomm.py
 
+from base64 import b64decode
 
-def comm_tensor():
+
+def comm_tensor(photoStr):
+    # photoStr: Base64 Encoded BARE photo WITHOUT any dataurl prefix.
     # Communicate with tensorflow backend, return Tuple(CHN char result, len(CHN))
     dataresult = ("正在施工", 0)
     return dataresult
+
+
+def save_photo(photoStr, eventid):
+    photo_binary = b64decode(photoStr.encode())
+    with open('userimgs/' + eventid + '.png', 'wb') as f:
+        f.write(photo_binary)
+    return 0
