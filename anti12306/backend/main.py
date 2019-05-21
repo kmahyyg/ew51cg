@@ -76,8 +76,8 @@ def userlog():
         usercreds_pw = request.form['password']
         usercreds_time = request.form['_']
         if int(time()) - usercreds_time > REPLAY_TIMEOUT:
-            raise IndexError
-    except IndexError:
+            raise KeyError
+    except KeyError:
         return make_response(jsonify(errResponse(-1, "Invalid request!")), 400)
     # check user's credentials
     try:
@@ -103,7 +103,7 @@ def batch_ocr2Text():
     try:
         usr_photo = request.form['photo']  # Already encoded in base64.
         usr_photo = usr_photo[22:]  # remove the prefix of dataurl: "data:image/png;base64,"
-    except IndexError:
+    except KeyError:
         return make_response(jsonify(errResponse(-1, "Photo invalid.")), 400)
     user_auth = check_batcredential(request)
     if user_auth[1] >= 0:
@@ -174,7 +174,7 @@ def logout():
             except InvalidRequestError:
                 db_session.rollback()
                 db_session.commit()
-        except IndexError:
+        except KeyError:
             return make_response('', 403)
     else:
         return make_response('', 400)
@@ -201,13 +201,13 @@ def checkOrd():
     if user_auth[1] >= 0:
         try:
             orderID = request.form['orderID']
-        except IndexError:
+        except KeyError:
             return make_response(jsonify(errResponse(-1, "Invalid data")), 403)
         payment_status = check_payment(orderID)
         try:
             if payment_status["retcode"] != 0:
                 return make_response(jsonify(errResponse(-5, "Server error")), 500)
-        except IndexError:
+        except KeyError:
             return make_response(jsonify(payment_status), 200)
     else:
         return make_response(jsonify(errResponse(-1, "Invalid Credentials")), 403)
