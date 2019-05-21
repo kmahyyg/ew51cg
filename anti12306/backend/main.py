@@ -82,8 +82,26 @@ def batch_ocr2Text():
 
 @app.route('/api/user/logout', methods=['GET'])
 def logout():
-    # TODO TO-BE-FINISHED
-    pass
+    # verify the host, then directly remove session in db
+    # will not do the user verification
+    if request.host == 'anti12306.55lovecn.top':
+        try:
+            now_token = request.headers['X-User-Token']
+            try:
+                now_sess = db_session.query(Session).filter_by(Session.usrtoken == now_token).one()
+                db_session.delete(now_sess)
+                db_session.commit()
+            except NoResultFound:
+                pass
+            except MultipleResultsFound:
+                pass
+            except InvalidRequestError:
+                db_session.rollback()
+                db_session.commit()
+        except IndexError:
+            return make_response('', 403)
+    else:
+        return make_response('', 400)
 
 
 @app.route('/api/user/createOrder', methods=['POST'])
@@ -141,7 +159,6 @@ def incorrect_recg():
 
 @app.route('/api/admin/review', methods=['GET'])
 def review_report():
-    from base64 import b64encode
     user_auth = check_batcredential(request)
     if user_auth[1] == 9:
         waiting_to_review = db_session.query(UploadEvent).filter_by(UploadEvent.status == 4).all()
