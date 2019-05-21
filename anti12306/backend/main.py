@@ -316,6 +316,7 @@ def cronjob():
                     else:
                         refund_cost = event.chnchars * 1.0 * 8
                     corresponding_user.balance += refund_cost
+                    db_session.delete(event)
                     db_session.commit()
             else:
                 pass
