@@ -194,7 +194,7 @@
         }
       }
     },
-    "ReviewEventResponse": {
+    "ReviewUpldEvent": {
       "type": "object",
       "properties": {
         "retcode": {
@@ -569,7 +569,7 @@
           "200": {
             "description": "Events to be reviewed.",
             "schema": {
-              "$ref": "#/definitions/ReviewEventResponse"
+              "$ref": "#/definitions/ReviewUpldEvent"
             }
           },
           "204": {
