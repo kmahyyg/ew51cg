@@ -22,6 +22,7 @@
 # This file is response models according to swagger document.
 # Working as a constructor-like object in Java.
 
+from dbop import *
 
 def errResponse(retcode, retmsg):
     if isinstance(retcode, int) and isinstance(retmsg, str):
@@ -88,5 +89,16 @@ def afterRecognitionResponse(eventid, retcode, retmsg, balance):
             "balance": balance
         }
         return datadict
+    else:
+        raise AssertionError("Illegal data input!")
+
+
+def reviewUpldEvent(events):
+    if events is not None and isinstance(events, UploadEvent):
+        from base64 import b64encode
+        photo_data = "data:image/png;base64," + b64encode(
+            open("userimgs/" + events.eventid + ".png", "rb").read()).decode()
+        eachEvent = {"eventid": events.eventid, "photo": photo_data, "content": events.recoged}
+        return eachEvent
     else:
         raise AssertionError("Illegal data input!")

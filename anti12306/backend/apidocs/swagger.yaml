@@ -141,7 +141,7 @@ definitions:
         type: number
         format: float
         description: "This event costs users N coins to recognize."
-  ReviewEventResponse:
+  ReviewUpldEvent:
     type: "object"
     properties:
       retcode:
@@ -389,7 +389,7 @@ paths:
         200:
           description: "Events to be reviewed."
           schema:
-            $ref: '#/definitions/ReviewEventResponse'
+            $ref: '#/definitions/ReviewUpldEvent'
         403:
           description: "Invalid Credentials"
           schema:

@@ -40,6 +40,10 @@
 
 接下来，调用用户 Token 判断函数 `frontend_token_renew()`，存在 Token 且未过期，直接返回 Token，否则 Renew Token 并 Revoke。若存在异常，返回 str("-5").
 
+# 用户上传
+
+上传的文件或字符串应当保存在对应 `userimgs/<EVENTID>.png`，裁剪和图片预处理由 Tensorflow 后端完成。
+
 # 系统返回 
 
 遵守 Swagger 文档，通用和报错模板均为 `errResponse()`

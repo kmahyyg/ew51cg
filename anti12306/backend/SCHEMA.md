@@ -51,6 +51,7 @@ create table upload (
     username varchar(20) not null,
     eventid varchar(80) not null,
     chnchars int not null,
+    recoged varchar(15) default null,
     upltime int(11) not null default unix_timestamp(current_timestamp),
     status tinyint(1) not null default 0, 
     /* 1=created, 0=success, 2=failed, 3=fraud, 4=waiting_review */

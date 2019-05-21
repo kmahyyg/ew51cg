@@ -22,7 +22,5 @@
 
 def comm_tensor():
     # Communicate with tensorflow backend, return Tuple(CHN char result, len(CHN))
-    dataresult = (None, 0)
-    #TODO
-    # after getting the result from tensorflow, save the result with eventID to the corresponding table.
+    dataresult = ("正在施工", 0)
     return dataresult

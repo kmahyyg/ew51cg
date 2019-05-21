@@ -151,10 +151,7 @@ def review_report():
                 "uploadevents": []
             }
             for events in waiting_to_review:
-                photo_data = "data:image/png;base64," + b64encode(
-                    open("userimgs/" + events.eventid + ".png", "rb").read()).decode()
-                #TODO FETCH EVENT RESULT FROM RESULT TABLE
-                eachEvent = {"eventid": events.eventid, "photo": photo_data}
+                eachEvent = reviewUpldEvent(events)
                 resultdict["uploadevents"].append(eachEvent)
             return make_response(jsonify(resultdict), 200)
         else:

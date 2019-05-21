@@ -52,6 +52,7 @@ class UploadEvent(Base):
     username = Column(String(20), nullable=False)
     eventid = Column(String(80), primary_key=True)
     chnchars = Column(Integer, nullable=False)
+    recoged = Column(String(15), nullable=True)
     UniqueConstraint('username', 'eventid', name='ukb')
     upltime = Column(Integer, default=int(time()))
     status = Column(SMALLINT, nullable=False, default=0)
