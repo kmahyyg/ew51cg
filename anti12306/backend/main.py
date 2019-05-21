@@ -42,7 +42,7 @@ def get_recog_history():
     user_auth = check_batcredential(request)
     basic_result = {"username": user_auth[0], "uploadevents": []}
     if user_auth[1] >= 0:
-        historylst = db_session.query(UploadEvent).filter_by(UploadEvent.username == user_auth[0]).all()
+        historylst = db_session.query(UploadEvent).filter_by(username=user_auth[0]).all()
         if len(historylst) > 0:
             for event in historylst:
                 event_id = event.eventid
@@ -81,7 +81,7 @@ def userlog():
         return make_response(jsonify(errResponse(-1, "Invalid request!")), 400)
     # check user's credentials
     try:
-        current_user = db_session.query(User).filter_by(User.username == usercreds_nm).one()
+        current_user = db_session.query(User).filter_by(username=usercreds_nm).one()
         user_activated = login_process(current_user, usercreds_pw)
         if user_activated < 0:
             return make_response(jsonify(user_activated, "Password not correct."), 403)
@@ -109,7 +109,7 @@ def batch_ocr2Text():
     if user_auth[1] >= 0:
         usrname = user_auth[0]
         cur_evntid = str(uuidgen())
-        cur_usrobj = db_session.query(User).filter_by(User.username == usrname).one()
+        cur_usrobj = db_session.query(User).filter_by(username=usrname).one()
         if cur_usrobj == 8 and cur_usrobj.balance > 150:
             result = comm_tensor(usr_photo)
             save_photo(usr_photo, cur_evntid)
@@ -164,7 +164,7 @@ def logout():
         try:
             now_token = request.headers['X-User-Token']
             try:
-                now_sess = db_session.query(Session).filter_by(Session.usrtoken == now_token).one()
+                now_sess = db_session.query(Session).filter_by(usrtoken=now_token).one()
                 db_session.delete(now_sess)
                 db_session.commit()
             except NoResultFound:
@@ -255,7 +255,7 @@ def incorrect_recg():
 def review_report():
     user_auth = check_batcredential(request)
     if user_auth[1] == 9:
-        waiting_to_review = db_session.query(UploadEvent).filter_by(UploadEvent.status == 4).all()
+        waiting_to_review = db_session.query(UploadEvent).filter_by(status=4).all()
         if len(waiting_to_review) > 0:
             resultdict = {
                 "retcode": 0,
@@ -277,7 +277,7 @@ def admin_approve():
     if user_auth[1] == 9:
         eventid = request.form['eventid']
         event_proc = request.form['op']
-        modified = db_session.query(UploadEvent).filter_by(UploadEvent.eventid == eventid).one()
+        modified = db_session.query(UploadEvent).filter_by(eventid=eventid).one()
         modified.status = int(event_proc)
         db_session.commit()
         return make_response(jsonify(errResponse(0, "Proceeded.")), 200)
@@ -289,14 +289,14 @@ def admin_approve():
 def cronjob():
     # This is used for daily job, cleanup user session and refund
     authed_site = request.headers["Origin"]
-    if authed_site == "127.0.0.1" and request.user_agent[:6] == "curl/7":
+    if authed_site == "127.0.0.1" and request.headers['User-Agent'][:6] == "curl/7":
         try:
             # Clean expired user session on the frontend
             all_sessions = db_session.query(Session).all()
             if len(all_sessions) > 0:
                 toexpire = []
                 for sess in all_sessions:
-                    if sess.timestamp - int(time()) > TOKEN_EXPIRE_TIME:
+                    if int(time()) - sess.logged > TOKEN_EXPIRE_TIME:
                         toexpire.append(sess)
                 for expired in toexpire:
                     db_session.delete(expired)
@@ -304,11 +304,11 @@ def cronjob():
             else:
                 pass
             # Refund will be done in each day 24:00
-            all_failed_recognition = db_session.query(UploadEvent).filter_by(UploadEvent.status == 2).all()
+            all_failed_recognition = db_session.query(UploadEvent).filter_by(status=2).all()
             if len(all_failed_recognition) > 0:
                 # get user id
                 for event in all_failed_recognition:
-                    corresponding_user = db_session.query(User).filter_by(User.username == event.username).one()
+                    corresponding_user = db_session.query(User).filter_by(username=event.username).one()
                     VIP_identify = corresponding_user.is_vip
                     refund_cost = 0.0
                     if VIP_identify > 0:
@@ -320,7 +320,7 @@ def cronjob():
             else:
                 pass
             # cleanup unpaid orders after 24h
-            all_expired_orders = db_session.query(Order).filter_by(Order.status == 1).all()
+            all_expired_orders = db_session.query(Order).filter_by(status=1).all()
             if len(all_expired_orders) > 0:
                 for order in all_expired_orders:
                     if int(time()) - order.submitat > TOKEN_EXPIRE_TIME:

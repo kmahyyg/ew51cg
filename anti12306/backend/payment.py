@@ -53,7 +53,7 @@ def writeOrderData(orderjson):
 
 def check_payment(orderid):
     try:
-        orderobj = db_session.query(Order).filter_by(Order.orderid == orderid).one()
+        orderobj = db_session.query(Order).filter_by(orderid=orderid).one()
         if isinstance(orderobj, Order):
             # the payment amount will automatically add to your balance by using database trigger.
             return afterPayResponse(

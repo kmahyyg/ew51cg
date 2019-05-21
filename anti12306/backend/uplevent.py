@@ -10,7 +10,7 @@ global db_session
 
 def mark_as_waiting(eventid, username):
     try:
-        suspecious_event = db_session.query(UploadEvent).filter_by(UploadEvent.eventid == eventid).one()
+        suspecious_event = db_session.query(UploadEvent).filter_by(eventid=eventid).one()
         if suspecious_event.username == username:
             suspecious_event.status = 4
             try:

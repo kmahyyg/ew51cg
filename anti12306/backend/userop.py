@@ -48,7 +48,7 @@ def frontend_token_renew(usrobj):
         usrnm = usrobj.username
         try:
             # get the current session token
-            session_lst = db_session.query(Session).filter_by(Session.username == usrnm).all()
+            session_lst = db_session.query(Session).filter_by(username=usrnm).all()
             newtkn = str(uuidgen())
             if len(session_lst) > 1:
                 for outdated in session_lst[1:]:
@@ -139,6 +139,6 @@ def check_batcredential(usrreq):
 
 def get_userstats(authresp):
     if authresp[0] is not None:
-        return db_session.query(User).filter_by(User.username == authresp[0]).one()
+        return db_session.query(User).filter_by(username=authresp[0]).one()
     else:
         raise LookupError("The user stats error occured: Internal Error!")
