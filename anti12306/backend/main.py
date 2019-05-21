@@ -167,6 +167,7 @@ def logout():
                 now_sess = db_session.query(Session).filter_by(usrtoken=now_token).one()
                 db_session.delete(now_sess)
                 db_session.commit()
+                return make_response('', 200)
             except NoResultFound:
                 pass
             except MultipleResultsFound:
