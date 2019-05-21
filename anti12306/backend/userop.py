@@ -96,7 +96,7 @@ def check_batcredential(usrreq):
         # Return Format: Tuple (Username, ValidateStatus)
         try:
             current_user = db_session.query(Session).filter(Session.usrtoken == usr_token).one()
-            if current_user.logged - int(time()) > TOKEN_EXPIRE_TIME:
+            if int(time()) - current_user.logged > TOKEN_EXPIRE_TIME:
                 # Token expired, please relogin.
                 db_session.delete(current_user)
                 try:

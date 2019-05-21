@@ -75,7 +75,7 @@ def userlog():
         usercreds_nm = request.form['username']
         usercreds_pw = request.form['password']
         usercreds_time = request.form['_']
-        if int(time()) - usercreds_time > REPLAY_TIMEOUT:
+        if int(time()) - int(usercreds_time) > REPLAY_TIMEOUT:
             raise KeyError
     except KeyError:
         return make_response(jsonify(errResponse(-1, "Invalid request!")), 400)
@@ -233,7 +233,7 @@ def incorrect_recg():
     try:
         eventid = request.form['eventid']
         timestamp = request.form['timestamp']
-        if int(time()) - timestamp > REPLAY_TIMEOUT:
+        if int(time()) - int(timestamp) > REPLAY_TIMEOUT:
             raise KeyError
     except:
         return make_response(jsonify(errResponse(-1, "Invalid Data!")), 400)
