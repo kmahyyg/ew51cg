@@ -69,7 +69,6 @@ def db_exit(session):
     session.close_all()
     return 0
 
-
 #
 # try:
 #     dbsess.add(adatah)

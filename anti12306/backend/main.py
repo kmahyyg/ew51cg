@@ -43,13 +43,31 @@ def get_recog_history():
 
 @app.route('/api/user/login', methods=['POST'])
 def userlog():
-    # TODO TO-BE-FINISHED
     # extract user login form
-    usercreds_nm = request.form['username']
-    usercreds_pw = request.form['password']
-    usercreds_time = request.form['_']
-    # get existing session, if null, create
-    # else, check if expired, revoke and regenerate
+    try:
+        usercreds_nm = request.form['username']
+        usercreds_pw = request.form['password']
+        usercreds_time = request.form['_']
+        if int(time()) - usercreds_time > REPLAY_TIMEOUT:
+            raise IndexError
+    except IndexError:
+        return make_response(jsonify(errResponse(-1, "Invalid request!")), 400)
+    # check user's credentials
+    try:
+        current_user = db_session.query(User).filter_by(User.username == usercreds_nm).one()
+        user_activated = login_process(current_user, usercreds_pw)
+        if user_activated < 0:
+            return make_response(jsonify(user_activated, "Password not correct."), 403)
+        else:
+            # get existing session, if null, create
+            # else, check if expired, revoke and regenerate
+            new_token = frontend_token_renew(current_user)
+            if new_token != "-5":
+                return make_response(jsonify(authenticatedResponse(0, new_token)), 200)
+            else:
+                return make_response(jsonify(errResponse(-5, "Internal Error")), 500)
+    except:
+        return make_response(jsonify(errResponse(-1, "User credential is not correct!")), 403)
 
 
 @app.route('/api/startOCR', methods=['POST'])
@@ -133,12 +151,14 @@ def review_report():
                 "uploadevents": []
             }
             for events in waiting_to_review:
-                photo_data = "data:image/png;base64," + b64encode(open("userimgs/" + events.eventid + ".png", "rb").read()).decode()
+                photo_data = "data:image/png;base64," + b64encode(
+                    open("userimgs/" + events.eventid + ".png", "rb").read()).decode()
+                #TODO FETCH EVENT RESULT FROM RESULT TABLE
                 eachEvent = {"eventid": events.eventid, "photo": photo_data}
                 resultdict["uploadevents"].append(eachEvent)
             return make_response(jsonify(resultdict), 200)
         else:
-            return make_response(jsonify(errResponse(0, "No events waiting to be reviewed.")), 200)
+            return make_response('', 204)
     else:
         return make_response(jsonify(errResponse(-1, "No valid credential")), 403)
 
@@ -161,34 +181,38 @@ def cronjob():
     # This is used for daily job, cleanup user session and refund
     authed_site = request.headers["Origin"]
     if authed_site == "127.0.0.1" and request.user_agent[:6] == "curl/7":
-        # Clean expired user session on the frontend
-        all_sessions = db_session.query(Session).all()
-        if len(all_sessions) > 0:
-            toexpire = []
-            for sess in all_sessions:
-                if sess.timestamp - int(time()) > TOKEN_EXPIRE_TIME:
-                    toexpire.append(sess)
-            for expired in toexpire:
-                db_session.delete(expired)
-            db_session.commit()
-        else:
-            pass
-        # Refund will be done in each day 24:00
-        all_failed_recognition = db_session.query(UploadEvent).filter_by(UploadEvent.status == 2).all()
-        if len(all_failed_recognition) > 0:
-            # get user id
-            for event in all_failed_recognition:
-                corresponding_user = db_session.query(User).filter_by(User.username == event.username).one()
-                VIP_identify = corresponding_user.is_vip
-                refund_cost = 0.0
-                if VIP_identify > 0:
-                    refund_cost = event.chnchars * 0.8 * 8
-                else:
-                    refund_cost = event.chnchars * 1.0 * 8
-                corresponding_user.balance += refund_cost
+        try:
+            # Clean expired user session on the frontend
+            all_sessions = db_session.query(Session).all()
+            if len(all_sessions) > 0:
+                toexpire = []
+                for sess in all_sessions:
+                    if sess.timestamp - int(time()) > TOKEN_EXPIRE_TIME:
+                        toexpire.append(sess)
+                for expired in toexpire:
+                    db_session.delete(expired)
                 db_session.commit()
-        else:
-            pass
+            else:
+                pass
+            # Refund will be done in each day 24:00
+            all_failed_recognition = db_session.query(UploadEvent).filter_by(UploadEvent.status == 2).all()
+            if len(all_failed_recognition) > 0:
+                # get user id
+                for event in all_failed_recognition:
+                    corresponding_user = db_session.query(User).filter_by(User.username == event.username).one()
+                    VIP_identify = corresponding_user.is_vip
+                    refund_cost = 0.0
+                    if VIP_identify > 0:
+                        refund_cost = event.chnchars * 0.8 * 8
+                    else:
+                        refund_cost = event.chnchars * 1.0 * 8
+                    corresponding_user.balance += refund_cost
+                    db_session.commit()
+            else:
+                pass
+            return make_response('', 204)
+        except:
+            return make_response(jsonify(errResponse(-5, "Internal Error")), 500)
     else:
         abort(403)
 

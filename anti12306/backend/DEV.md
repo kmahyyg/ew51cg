@@ -16,7 +16,7 @@
 
 用户的每一个请求都应当携带对应请求头用于验证身份，每一个表单都应当携带时间戳用于抗重放攻击。
 
-## 用户验证函数
+## 用户 Token 验证函数
 
 由于系统特殊性，这个系统的用户需要人工添加。
 
@@ -34,6 +34,12 @@
 
 用户验证函数返回的唯一用户名将用于下一步处理与进一步表示用户事件。
 
+## 用户登陆表单验证函数
+
+`login_process()` 读取数据库中的盐值，数据字符串必须 Encode 为 Byte 类型，然后进行 md5 带盐 hash，如果 hash 与数据库中的 hash 相符，返回 0, 否则返回 -1.
+
+接下来，调用用户 Token 判断函数 `frontend_token_renew()`，存在 Token 且未过期，直接返回 Token，否则 Renew Token 并 Revoke。若存在异常，返回 str("-5").
+
 # 系统返回 
 
 遵守 Swagger 文档，通用和报错模板均为 `errResponse()`
@@ -44,4 +50,3 @@
 - `Sqlalchemy` 使用 `session.query.filter.one()` 返回可能引起的 Exception 有：
     `InvalidRequestError`, `NoResultFound`, `MultipleResultsFound` 
     均包含在 `sqlalchemy.orm.exc.*` / `sqlalchemy.exc.*`
-- 

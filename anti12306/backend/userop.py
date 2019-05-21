@@ -7,9 +7,53 @@ from respmodel import *
 from sqlalchemy.orm.exc import *
 from sqlalchemy.exc import *
 import flask
+from hashlib import md5
 
 TOKEN_EXPIRE_TIME = 86400
 global db_session
+
+
+def login_process(usrobj, login_password):
+    if isinstance(usrobj, User):
+        user_salt = usrobj.salt.encode()
+        login_pwd = login_password.encode()
+        server_logged_pwd = usrobj.password
+        if md5(login_pwd + user_salt).hexdigest() == server_logged_pwd:
+            return 0
+        else:
+            return -1
+
+
+def frontend_token_renew(usrobj):
+    if isinstance(usrobj, User):
+        usrnm = usrobj.username
+        try:
+            # get the current session token
+            session_lst = db_session.query(Session).filter_by(Session.username == usrnm).all()
+            newtkn = str(uuidgen())
+            if len(session_lst) > 1:
+                for outdated in session_lst[1:]:
+                    db_session.delete(outdated)
+                    db_session.commit()
+            elif len(session_lst) == 1:
+                # validate if expired
+                current_session = session_lst[0]
+                if int(time()) - current_session.timestamp > TOKEN_EXPIRE_TIME:
+                    db_session.delete(current_session)
+                    db_session.commit()
+                    # after invalidated, create
+                    cur_ses = Session(username=usrnm, usrtoken=newtkn)
+                    db_session.add(cur_ses)
+                    db_session.commit()
+                    return cur_ses
+            else:
+                # session not exists, create a new one
+                cur_ses = Session(username=usrnm, usrtoken=newtkn)
+                db_session.add(cur_ses)
+                db_session.commit()
+                return cur_ses
+        except:
+            return "-5"
 
 
 def check_batcredential(usrreq):

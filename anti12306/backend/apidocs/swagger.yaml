@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the part of Anti12306 OCR Computer Vision Project which was built for research purposes only. Any illegal usage will be reported immediately to the Public Security Office. Your connection information will be logged. Please follow this document strictly while developing software or using."
-  version: "0.3"
+  version: "0.5"
   title: "Anti12306 Web API"
   termsOfService: "https://anti12306.55lovecn.top/ToS.html"
   contact:
@@ -30,6 +30,16 @@ securityDefinitions:
     type: "apiKey"
     in: "header"
     name: "X-User-Token"
+  gateway:
+    type: "apiKey"
+    in: "header"
+    name: "X-blahblah"
+    description: "Gateway defined authentication method"
+  localhost:
+    type: "apiKey"
+    name: "Origin"
+    in: "header"
+    description: "Origin must be 127.0.0.1 and User-agent must start with \"curl/7\""
 definitions:
   ErrResponse:
     type: "object"
@@ -131,6 +141,28 @@ definitions:
         type: number
         format: float
         description: "This event costs users N coins to recognize."
+  ReviewEventResponse:
+    type: "object"
+    properties:
+      retcode:
+        type: integer
+        format: int32
+        description: "Status code"
+      uploadevents:
+        type: "array"
+        description: "The events waiting to be reviewed."
+        items:
+          type: "object"
+          properties:
+            eventid:
+              type: string
+              description: "Event ID in the response after recognition."
+            photo:
+              type: string
+              description: "Base64-encoded Photo DataURL."
+            content:
+              type: string
+              description: "Recognition result."
   UploadHistory:
     type: "object"
     properties:
@@ -183,6 +215,10 @@ paths:
             $ref: '#/definitions/ErrResponse'
         400:
           description: "Invalid request"
+          schema:
+            $ref: '#/definitions/ErrResponse'
+        500:
+          description: "Server internal error."
           schema:
             $ref: '#/definitions/ErrResponse'
   /user/createOrder:
@@ -241,6 +277,8 @@ paths:
       responses:
         200:
           description: "Server already proceeded the request."
+        400:
+          description: "Invalid request."
   /user/checkOrder:
       get:
         tags:
@@ -358,7 +396,7 @@ paths:
           required: true
       responses:
         200:
-          description: "Process result returned from server."
+          description: "Proceeded result returned from server."
           schema:
             $ref: '#/definitions/ErrResponse'
         403:
@@ -386,5 +424,93 @@ paths:
             $ref: '#/definitions/UploadHistory'
         403:
           description: "User token is invalid."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+  /payment/callback:
+    post:
+      tags:
+        - "dev"
+      security:
+        - gateway: []
+      summary: "Under construction"
+      description: "Preserve API for cooperate with payment gateway."
+      consumes:
+        - "application/json"
+      responses:
+        200:
+          description: "Done."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+          examples:
+            application/json:
+              retcode: -1
+              retmsg: "Under construction"
+        400:
+          description: "Invalid Request"
+  /api/cron:
+    options:
+      tags:
+        - "dev"
+        - "maintainer"
+      security:
+        - localhost: []
+      summary: "Running at localhost for cleanup"
+      description: "Cleanup expired session and run cron-ed job like refund"
+      responses:
+        204:
+          description: "Successfully finished"
+        403:
+          description: "Remote access is not allowed"
+        500:
+          description: "Server internal error."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+  /api/admin/review:
+    post:
+      tags:
+        - "dev"
+        - "maintainer"
+      security:
+        - user_token: []
+      summary: "Upload the verified response for an upload event"
+      description: "When admin clicked allow button to allow a refund."
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "formData"
+          name: "eventid"
+          type: string
+          required: true
+          description: "Corresponding event ID which was failed to recognize"
+      responses:
+        200:
+          description: "Proceeded."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+        403:
+          description: "Unauthorized user."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+    get:
+      tags:
+        - "dev"
+        - "maintainer"
+      security:
+        - user_token: []
+      summary: "Fetch events for manual review"
+      description: "Fetch events for manual review, only can be used by administrator, which will return a photo dataurl and corresponding eventid"
+      produces:
+        - "application/json"
+      responses:
+        204:
+          description: "No event is waiting to be reviewed."
+        200:
+          description: "Events to be reviewed."
+          schema:
+            $ref: '#/definitions/ReviewEventResponse'
+        403:
+          description: "Invalid Credentials"
           schema:
             $ref: '#/definitions/ErrResponse'
