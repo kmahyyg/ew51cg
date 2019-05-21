@@ -5,7 +5,7 @@ info:
   Your connection information will be logged.
   Please follow this document strictly while developing software or using. All APIs may response a 500 to reveal that
   a server error has occurred. If you see this, contact administrator immediately."
-  version: "0.5"
+  version: "0.7"
   title: "Anti12306 Web API"
   termsOfService: "https://anti12306.55lovecn.top/ToS.html"
   contact:
