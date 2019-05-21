@@ -13,6 +13,22 @@ TOKEN_EXPIRE_TIME = 86400
 global db_session
 
 
+def user_num2desc(status):
+    if isinstance(status, int):
+        if status == 0:
+            return "normal user"
+        elif status == 1:
+            return "fraud user - banned"
+        elif status == 8:
+            return "vip user"
+        elif status == 9:
+            return "administrator"
+        else:
+            return "unknown"
+    else:
+        return None
+
+
 def login_process(usrobj, login_password):
     if isinstance(usrobj, User):
         user_salt = usrobj.salt.encode()

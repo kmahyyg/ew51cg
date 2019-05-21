@@ -24,6 +24,7 @@
 
 from dbop import *
 
+
 def errResponse(retcode, retmsg):
     if isinstance(retcode, int) and isinstance(retmsg, str):
         datadict = {"retcode": retcode, "retmsg": retmsg}

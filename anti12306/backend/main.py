@@ -72,9 +72,10 @@ def userlog():
 
 @app.route('/api/startOCR', methods=['POST'])
 def batch_ocr2Text():
-    # TODO: Get user balance, must > 150 coins
-    # Get OCR result of uploaded photo
-    # photo is a base64 encoded string
+    # TODO: TO-BE-FINISHED
+    #  Get user balance, must > 150 coins
+    #  Get OCR result of uploaded photo
+    #  photo is a base64 encoded string
     photo_b64 = request.form['photo']
     photo_time = request.form['timestamp']
     # Credential check
@@ -111,10 +112,7 @@ def createOrd():
         orderData = request.json
         orderid = writeOrderData(orderData)
         if orderid != None:
-            datadict = {
-                "retcode": 0,
-                "orderid": orderid
-            }
+            datadict = orderResponse(0, orderid)
             return make_response(jsonify(datadict), 200)
         else:
             return make_response(jsonify(errResponse(-5, "Server error")), 500)
@@ -266,7 +264,7 @@ def cronjob():
 
 @app.route('/api/payment/callback', methods=['POST'])
 def recv_payment_callback():
-    # TODO: UPDATE THE STATUS OF ORDER TO THE CORRESPONDING ONE (future)
+    # TODO: reserved for process payment gateway response
     process_gateway(request)
     return make_response(jsonify(errResponse(-1, "Under Construction")), 200)
 
