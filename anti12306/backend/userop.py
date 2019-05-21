@@ -35,7 +35,10 @@ def login_process(usrobj, login_password):
         login_pwd = login_password.encode()
         server_logged_pwd = usrobj.password
         if md5(login_pwd + user_salt).hexdigest() == server_logged_pwd:
-            return 0
+            if usrobj.break_law == 0:
+                return 0
+            else:
+                return -2
         else:
             return -1
 
@@ -107,15 +110,18 @@ def check_batcredential(usrreq):
                 return data
             else:
                 # Token validated, go on
-                if current_user.is_vip == 9:
-                    data = (current_user.username, 9)
-                    return data
-                elif current_user.is_vip == 8:
-                    data = (current_user.username, 8)
-                    return data
+                if current_user.break_law == 0:
+                    if current_user.is_vip == 9:
+                        data = (current_user.username, 9)
+                        return data
+                    elif current_user.is_vip == 8:
+                        data = (current_user.username, 8)
+                        return data
+                    else:
+                        data = (current_user.username, 0)
+                        return data
                 else:
-                    data = (current_user.username, 0)
-                    return data
+                    raise NoResultFound
         except NoResultFound:
             data = (None, -2)
             return data

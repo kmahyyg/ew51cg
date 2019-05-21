@@ -70,6 +70,9 @@ def check_payment(orderid):
 
 def process_gateway(req):
     # TODO: reserved for process payment gateway response
+    # this response must be saved to another table which used to check the corresponding
+    # relationship between internal order id and payment gateway order id
+    # also, the response must change the order status in the database
     if isinstance(req, flask.request):
         pass
     else:

@@ -16,12 +16,12 @@ class User(Base):
     __tablename__ = 'users'
     username = Column(String(20), primary_key=True, unique=True)
     password = Column(String(64), nullable=False)
-    is_vip = Column(Integer, nullable=False, default=False)
-    # is_vip, vip user badge(1), admin badge(9)
+    is_vip = Column(Integer, nullable=False, default=0)
+    # is_vip, vip user badge(8), admin badge(9)
     # is_vip, normal user(0)
     balance = Column(Float, nullable=False, default=0.0)
     apikey = Column(String(64), nullable=False)
-    break_law = Column(Boolean, nullable=False, default=False)
+    break_law = Column(Integer, nullable=False, default=0)
     # salt should be generated using token_hex
     salt = Column(String(16), nullable=False, default=str(tokengen(8)))
     topup_amount = Column(Float, nullable=False, default=0.0)

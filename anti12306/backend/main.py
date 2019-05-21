@@ -28,6 +28,7 @@ from respmodel import *
 from userop import *
 from uplevent import *
 from payment import *
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -37,8 +38,33 @@ db_session = create_db_conn()
 
 @app.route('/api/user/getHistory', methods=['GET'])
 def get_recog_history():
-    # TODO TO-BE-FINISHED
-    pass
+    user_auth = check_batcredential(request)
+    basic_result = {"username": user_auth[0], "uploadevents": []}
+    if user_auth[1] >= 0:
+        historylst = db_session.query(UploadEvent).filter_by(UploadEvent.username == user_auth[0]).all()
+        if len(historylst) > 0:
+            for event in historylst:
+                event_id = event.eventid
+                ts = datetime.fromtimestamp(int(event.upltime)).strftime('%Y-%m-%d %H:%M:%S')
+                if user_auth[1] == 8:
+                    actual_cost = float(event.chnchars * 8.0 * 0.8)
+                elif user_auth[1] == 9:
+                    actual_cost = float(0.0)
+                elif user_auth[1] == 2:
+                    return make_response(jsonify(errResponse(-1, "This method is not allowed to be accessed in batch."))
+                                         , 403)
+                else:
+                    actual_cost = float(event.chnchars * 8.0)
+                basic_result["uploadevents"].append(
+                    uploadEventResponse(
+                        eventid=event_id, timestamp=ts, cost=actual_cost
+                    )
+                )
+            return make_response(jsonify(basic_result), 200)
+        else:
+            return make_response(jsonify(basic_result), 200)
+    else:
+        return make_response(jsonify(errResponse(-1, "Invalid Credentials")), 403)
 
 
 @app.route('/api/user/login', methods=['POST'])
@@ -72,13 +98,25 @@ def userlog():
 
 @app.route('/api/startOCR', methods=['POST'])
 def batch_ocr2Text():
-    # TODO: TO-BE-FINISHED
-    #  Get user balance, must > 150 coins
-    #  Get OCR result of uploaded photo
-    #  photo is a base64 encoded string
-    photo_b64 = request.form['photo']
-    photo_time = request.form['timestamp']
-    # Credential check
+    #TODO
+    # NOT DETECT REPLAY HERE: JUST LET USER PAY FOR WHAT THEY HAVE DONE!
+    usr_photo = request.form['photo']
+    user_auth = check_batcredential(request)
+    if user_auth[1] >= 0:
+        usrname = user_auth[0]
+        cur_usrobj = db_session.query(User).filter_by(User.username == usrname).one()
+        if cur_usrobj.balance < 150 and cur_usrobj.is_vip != 9:
+            return make_response(jsonify(errResponse(-3, "Insufficient balance.")), 400)
+        elif cur_usrobj == 8 and cur_usrobj.balance > 150:
+
+        elif cur_usrobj == 0 and cur_usrobj.balance > 150:
+
+        elif cur_usrobj.is_vip == 9:
+
+        else:
+            return make_response(jsonify(-5, "Server Internal Error"), 500)
+    else:
+        return make_response(jsonify(errResponse(-1, "Permission Denied")), 403)
 
 
 @app.route('/api/user/logout', methods=['GET'])

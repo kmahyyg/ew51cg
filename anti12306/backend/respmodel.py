@@ -23,6 +23,7 @@
 # Working as a constructor-like object in Java.
 
 from dbop import *
+from userop import *
 
 
 def errResponse(retcode, retmsg):
@@ -42,15 +43,18 @@ def authenticatedResponse(retcode, token):
 
 
 def uploadEventResponse(eventid, timestamp, cost):
-    datadict = {"eventid": eventid, "timestamp": timestamp, "cost": cost}
-    return datadict
+    if isinstance(timestamp, int) and isinstance(cost, float):
+        datadict = {"eventid": eventid, "timestamp": timestamp, "cost": cost}
+        return datadict
+    else:
+        raise AssertionError("Illegal data input!")
 
 
 def userStats(username, is_vip, apikey, balance, illegal):
-    if isinstance(is_vip, bool) and isinstance(illegal, bool) and isinstance(balance, float):
+    if isinstance(is_vip, int) and isinstance(illegal, int) and isinstance(balance, float):
         datadict = {
             "username": username,
-            "is_vip": is_vip,
+            "is_vip": user_num2desc(is_vip),
             "apikey": apikey,
             "balance": balance,
             "break_law": illegal

@@ -163,7 +163,7 @@
         },
         "is_vip": {
           "type": "boolean",
-          "description": "If true, this user topup-ed more than 100 RMB, is a VIP. He will get 33% discount."
+          "description": "If true, this user topup-ed more than 100 RMB, is a VIP. He will get 20% discount."
         },
         "apikey": {
           "type": "string",
@@ -640,7 +640,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully recognized. Costed n*15 coins. n is the number of the chinese characters in a photo.",
+            "description": "Successfully recognized. Costed n*8 coins. n is the number of the chinese characters in a photo.",
             "schema": {
               "$ref": "#/definitions/AfterRecognitionResponse"
             }

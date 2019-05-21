@@ -81,7 +81,7 @@ create trigger topupd after update on orders
     for each row
     begin
         if new.status = 0 then
-            update users set balance = balance + new.amount where username = new.username;
+            update users set balance = balance + new.amount*100 where username = new.username;
             update users set total_topup = total_topup + new.amount where username = new.username;
         end if;
     end;

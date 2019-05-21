@@ -123,7 +123,7 @@ definitions:
         description: "User name"
       is_vip:
         type: boolean
-        description: "If true, this user topup-ed more than 100 RMB, is a VIP. He will get 33% discount."
+        description: "If true, this user topup-ed more than 100 RMB, is a VIP. He will get 20% discount."
       apikey:
         type: string
         description: "Batch processing API key. Let user keep it secret and saved in a safe place."
@@ -436,7 +436,7 @@ paths:
           description: "UTC Timestamp when submit."
       responses:
         200:
-          description: "Successfully recognized. Costed n*15 coins. n is the number of the chinese characters in a photo."
+          description: "Successfully recognized. Costed n*8 coins. n is the number of the chinese characters in a photo."
           schema:
             $ref: '#/definitions/AfterRecognitionResponse'
         400:
