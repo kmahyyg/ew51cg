@@ -307,48 +307,6 @@ paths:
             description: "User token not included or param is null."
             schema:
               $ref: '#/definitions/ErrResponse'
-  /startOCR:
-    post:
-      tags:
-        - "user"
-      summary: "Get OCR Result of uploaded photo"
-      description: "Use this API in userspace to get the OCR result of the captcha image."
-      security:
-        - api_key: []
-        - user_token: []
-      produces:
-        - "application/json"
-      consumes:
-        - "application/x-www-form-urlencoded"
-        - "application/json"
-      parameters:
-        - in: formData
-          name: "photo"
-          type: string
-          description: "Original CAPTCHA image encoded in Base64."
-          required: true
-        - in: formData
-          name: "timestamp"
-          type: integer
-          format: int32
-          description: "UTC Timestamp when submit."
-      responses:
-        200:
-          description: "Successfully recognized. Costed n*15 coins. n is the number of the chinese characters in a photo."
-          schema:
-            $ref: '#/definitions/AfterRecognitionResponse'
-        400:
-          description: "Invalid request."
-          schema:
-            $ref: '#/definitions/ErrResponse'
-        403:
-          description: "Identification failed. Invalid user token or API key."
-          schema:
-            $ref: '#/definitions/ErrResponse'
-        500:
-          description: "Internal server error or recognize failed. Response maybe empty."
-          schema:
-            $ref: '#/definitions/ErrResponse'
   /user/getUser:
     get:
       tags:
@@ -366,45 +324,6 @@ paths:
             $ref: '#/definitions/UserStats'
         403:
           description: "User Token is expired or revoked. Or this user is unauthorized."
-          schema:
-            $ref: '#/definitions/ErrResponse'
-  /report/error:
-    post:
-      tags:
-        - "dev"
-        - "user"
-      security:
-        - user_token: []
-        - api_key: []
-      produces:
-        - "application/json"
-      consumes:
-        - "application/x-www-form-urlencoded"
-      summary: "Recognition is not corresponding to the photo. Ask a refund."
-      description: "The recognition may not correct. So we cannot let user pay for that. Just do a refund."
-      parameters:
-        - in: "formData"
-          name: "eventid"
-          type: string
-          required: true
-          description: "The eventid in response after recognition."
-        - in: "formData"
-          name: "timestamp"
-          description: "UTC timestamp when submit."
-          type: integer
-          format: int32
-          required: true
-      responses:
-        200:
-          description: "Proceeded result returned from server."
-          schema:
-            $ref: '#/definitions/ErrResponse'
-        403:
-          description: "Usertoken is invalid."
-          schema:
-            $ref: '#/definitions/ErrResponse'
-        400:
-          description: "Request body is malformed."
           schema:
             $ref: '#/definitions/ErrResponse'
   /user/getHistory:
@@ -426,46 +345,7 @@ paths:
           description: "User token is invalid."
           schema:
             $ref: '#/definitions/ErrResponse'
-  /payment/callback:
-    post:
-      tags:
-        - "dev"
-      security:
-        - gateway: []
-      summary: "Under construction"
-      description: "Preserve API for cooperate with payment gateway."
-      consumes:
-        - "application/json"
-      responses:
-        200:
-          description: "Done."
-          schema:
-            $ref: '#/definitions/ErrResponse'
-          examples:
-            application/json:
-              retcode: -1
-              retmsg: "Under construction"
-        400:
-          description: "Invalid Request"
-  /api/cron:
-    options:
-      tags:
-        - "dev"
-        - "maintainer"
-      security:
-        - localhost: []
-      summary: "Running at localhost for cleanup"
-      description: "Cleanup expired session and run cron-ed job like refund"
-      responses:
-        204:
-          description: "Successfully finished"
-        403:
-          description: "Remote access is not allowed"
-        500:
-          description: "Server internal error."
-          schema:
-            $ref: '#/definitions/ErrResponse'
-  /api/admin/review:
+  /admin/review:
     post:
       tags:
         - "dev"
@@ -512,5 +392,125 @@ paths:
             $ref: '#/definitions/ReviewEventResponse'
         403:
           description: "Invalid Credentials"
+          schema:
+            $ref: '#/definitions/ErrResponse'
+  /startOCR:
+    post:
+      tags:
+        - "user"
+      summary: "Get OCR Result of uploaded photo"
+      description: "Use this API in userspace to get the OCR result of the captcha image."
+      security:
+        - api_key: []
+        - user_token: []
+      produces:
+        - "application/json"
+      consumes:
+        - "application/x-www-form-urlencoded"
+        - "application/json"
+      parameters:
+        - in: formData
+          name: "photo"
+          type: string
+          description: "Original CAPTCHA image encoded in Base64."
+          required: true
+        - in: formData
+          name: "timestamp"
+          type: integer
+          format: int32
+          description: "UTC Timestamp when submit."
+      responses:
+        200:
+          description: "Successfully recognized. Costed n*15 coins. n is the number of the chinese characters in a photo."
+          schema:
+            $ref: '#/definitions/AfterRecognitionResponse'
+        400:
+          description: "Invalid request."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+        403:
+          description: "Identification failed. Invalid user token or API key."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+        500:
+          description: "Internal server error or recognize failed. Response maybe empty."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+  /report/error:
+    post:
+      tags:
+        - "dev"
+        - "user"
+      security:
+        - user_token: []
+        - api_key: []
+      produces:
+        - "application/json"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      summary: "Recognition is not corresponding to the photo. Ask a refund."
+      description: "The recognition may not correct. So we cannot let user pay for that. Just do a refund."
+      parameters:
+        - in: "formData"
+          name: "eventid"
+          type: string
+          required: true
+          description: "The eventid in response after recognition."
+        - in: "formData"
+          name: "timestamp"
+          description: "UTC timestamp when submit."
+          type: integer
+          format: int32
+          required: true
+      responses:
+        200:
+          description: "Proceeded result returned from server."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+        403:
+          description: "Usertoken is invalid."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+        400:
+          description: "Request body is malformed."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+  /payment/callback:
+    post:
+      tags:
+        - "dev"
+      security:
+        - gateway: []
+      summary: "Under construction"
+      description: "Preserve API for cooperate with payment gateway."
+      consumes:
+        - "application/json"
+      responses:
+        200:
+          description: "Done."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+          examples:
+            application/json:
+              retcode: -1
+              retmsg: "Under construction"
+        400:
+          description: "Invalid Request"
+  /cron:
+    options:
+      tags:
+        - "dev"
+        - "maintainer"
+      security:
+        - localhost: []
+      summary: "Running at localhost for cleanup"
+      description: "Cleanup expired session and run cron-ed job like refund"
+      responses:
+        204:
+          description: "Successfully finished"
+        403:
+          description: "Remote access is not allowed"
+        500:
+          description: "Server internal error."
           schema:
             $ref: '#/definitions/ErrResponse'
