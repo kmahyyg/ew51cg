@@ -76,16 +76,15 @@ def frontend_token_renew(usrobj):
 
 
 def check_batcredential(usrreq):
-    if isinstance(usrreq, flask.request):
         # Check Type
-        try:
-            usr_token = usrreq.headers['X-User-Token']
-        except KeyError:
-            usr_token = None
-        try:
-            usr_apikey = usrreq.headers['X-APIKEY']
-        except KeyError:
-            usr_apikey = None
+    try:
+        usr_token = usrreq.headers['X-User-Token']
+    except KeyError:
+        usr_token = None
+    try:
+        usr_apikey = usrreq.headers['X-APIKEY']
+    except KeyError:
+        usr_apikey = None
         # Check existence
     if usr_apikey is None and usr_token is None:
         data = (None, -1)
