@@ -27,6 +27,10 @@
         "description": "The source code",
         "url": "https://github.com/kmahyyg/ew51cg"
       }
+    },
+    {
+      "name": "maintainer",
+      "description": "The document for instance builder"
     }
   ],
   "schemes": [

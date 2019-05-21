@@ -106,17 +106,38 @@ def logout():
 
 @app.route('/api/user/createOrder', methods=['POST'])
 def createOrd():
-    orderData = request.json
-    order_usr = orderData['username']
-    order_amount = float(orderData['amount'])
-    order_paygate = orderData['payment']
-    # TODO TO-BE-FINISHED
+    user_auth = check_batcredential(request)
+    if user_auth[1] >= 0:
+        orderData = request.json
+        orderid = writeOrderData(orderData)
+        if orderid != None:
+            datadict = {
+                "retcode": 0,
+                "orderid": orderid
+            }
+            return make_response(jsonify(datadict), 200)
+        else:
+            return make_response(jsonify(errResponse(-5, "Server error")), 500)
+    else:
+        return make_response(jsonify(errResponse(-1, "Invalid Credentials")), 403)
 
 
 @app.route('/api/user/checkOrder', methods=['GET'])
 def checkOrd():
-    orderID = request.form['orderID']
-    # TODO TO-BE-FINISHED
+    user_auth = check_batcredential(request)
+    if user_auth[1] >= 0:
+        try:
+            orderID = request.form['orderID']
+        except IndexError:
+            return make_response(jsonify(errResponse(-1, "Invalid data")), 403)
+        payment_status = check_payment(orderID)
+        try:
+            if payment_status["retcode"] != 0:
+                return make_response(jsonify(errResponse(-5, "Server error")), 500)
+        except IndexError:
+            return make_response(jsonify(payment_status), 200)
+    else:
+        return make_response(jsonify(errResponse(-1, "Invalid Credentials")), 403)
 
 
 @app.route('/api/user/getUser', methods=['GET'])
@@ -182,8 +203,9 @@ def admin_approve():
     user_auth = check_batcredential(request)
     if user_auth[1] == 9:
         eventid = request.form['eventid']
+        event_proc = request.form['op']
         modified = db_session.query(UploadEvent).filter_by(UploadEvent.eventid == eventid).one()
-        modified.status = 2
+        modified.status = int(event_proc)
         db_session.commit()
         return make_response(jsonify(errResponse(0, "Proceeded.")), 200)
     else:
@@ -224,6 +246,17 @@ def cronjob():
                     db_session.commit()
             else:
                 pass
+            # cleanup unpaid orders after 24h
+            all_expired_orders = db_session.query(Order).filter_by(Order.status == 1).all()
+            if len(all_expired_orders) > 0:
+                for order in all_expired_orders:
+                    if int(time()) - order.submitat > TOKEN_EXPIRE_TIME:
+                        db_session.delete(order)
+                        db_session.commit()
+                    else:
+                        pass
+            else:
+                pass
             return make_response('', 204)
         except:
             return make_response(jsonify(errResponse(-5, "Internal Error")), 500)
@@ -234,6 +267,7 @@ def cronjob():
 @app.route('/api/payment/callback', methods=['POST'])
 def recv_payment_callback():
     # TODO: UPDATE THE STATUS OF ORDER TO THE CORRESPONDING ONE (future)
+    process_gateway(request)
     return make_response(jsonify(errResponse(-1, "Under Construction")), 200)
 
 

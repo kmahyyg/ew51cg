@@ -48,9 +48,20 @@
 
 遵守 Swagger 文档，通用和报错模板均为 `errResponse()`
 
+# 关于订单与充值处理
+
+充值成功的订单会自动使用数据库触发器自动处理添加账户余额。充值总额超过 100 的会在下次充值时升级为 VIP。
+
+`process_gateway(req)` 用于处理支付网关返回的数据，目前来说为不做操作，对应的请求直接处理函数为 `recv_payment_callback()` ，一直返回 -1，正在施工。
+
+`writeOrderData(orderjson)` 用于创建订单，最终返回订单号，`retcode` 表示处理状态。
+
+`check_payment(orderid)` 用于检查订单状态，最终参照 API 文档返回字典。
+
 # 踩的坑
 
 - 数据库触发器定义异常不一定能在创建时显示出来，但插入数据时会有些莫名奇妙的错误代码，应当检查相关约束、触发器
 - `Sqlalchemy` 使用 `session.query.filter.one()` 返回可能引起的 Exception 有：
     `InvalidRequestError`, `NoResultFound`, `MultipleResultsFound` 
     均包含在 `sqlalchemy.orm.exc.*` / `sqlalchemy.exc.*`
+- 数据库为了避免 UUID 在 M-S 模式下出现全局不唯一的情况，UUID 的生成应当在处理服务器完成，而不是使用 SQL 服务器内建函数 `UUID()`

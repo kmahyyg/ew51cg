@@ -25,7 +25,3 @@ def mark_as_waiting(eventid, username):
             return -2
     except:
         return -1
-
-
-def review_event(eventid, user_auth_response):
-    pass
