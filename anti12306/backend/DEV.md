@@ -65,3 +65,4 @@
     `InvalidRequestError`, `NoResultFound`, `MultipleResultsFound` 
     均包含在 `sqlalchemy.orm.exc.*` / `sqlalchemy.exc.*`
 - 数据库为了避免 UUID 在 M-S 模式下出现全局不唯一的情况，UUID 的生成应当在处理服务器完成，而不是使用 SQL 服务器内建函数 `UUID()`
+- 传输到服务器的 HTTP Form 内的数据，类型全为 String，需要自主转换
