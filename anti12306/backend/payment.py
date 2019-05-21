@@ -8,6 +8,7 @@ from uuid import uuid4 as uuidgen
 from dbop import *
 
 global db_session
+db_session = create_db_conn()
 
 
 def event_num2desc(status_code):

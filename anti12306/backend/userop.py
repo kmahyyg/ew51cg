@@ -11,6 +11,7 @@ from hashlib import md5
 
 TOKEN_EXPIRE_TIME = 86400
 global db_session
+db_session = create_db_conn()
 
 
 def user_num2desc(status):
@@ -34,7 +35,8 @@ def login_process(usrobj, login_password):
         user_salt = usrobj.salt.encode()
         login_pwd = login_password.encode()
         server_logged_pwd = usrobj.password
-        if md5(login_pwd + user_salt).hexdigest() == server_logged_pwd:
+        current_pwd = md5(login_pwd + user_salt).hexdigest()
+        if current_pwd == server_logged_pwd:
             if usrobj.break_law == 0:
                 return 0
             else:
@@ -51,26 +53,32 @@ def frontend_token_renew(usrobj):
             session_lst = db_session.query(Session).filter_by(username=usrnm).all()
             newtkn = str(uuidgen())
             if len(session_lst) > 1:
-                for outdated in session_lst[1:]:
+                for outdated in session_lst:
                     db_session.delete(outdated)
                     db_session.commit()
+                cur_ses = Session(username=usrnm, usrtoken=newtkn)
+                db_session.add(cur_ses)
+                db_session.commit()
+                return cur_ses.usrtoken
             elif len(session_lst) == 1:
                 # validate if expired
                 current_session = session_lst[0]
-                if int(time()) - current_session.timestamp > TOKEN_EXPIRE_TIME:
+                if int(time()) - current_session.logged > TOKEN_EXPIRE_TIME:
                     db_session.delete(current_session)
                     db_session.commit()
                     # after invalidated, create
                     cur_ses = Session(username=usrnm, usrtoken=newtkn)
                     db_session.add(cur_ses)
                     db_session.commit()
-                    return cur_ses
+                    return cur_ses.usrtoken
+                else:
+                    return current_session.usrtoken
             else:
                 # session not exists, create a new one
                 cur_ses = Session(username=usrnm, usrtoken=newtkn)
                 db_session.add(cur_ses)
                 db_session.commit()
-                return cur_ses
+                return cur_ses.usrtoken
         except:
             return "-5"
 
