@@ -30,6 +30,9 @@ from uplevent import *
 from payment import *
 from datetime import datetime
 from bankcomm import *
+from secrets import token_hex as saltgen
+from secrets import token_urlsafe as pwdgen
+from hashlib import md5
 
 app = Flask(__name__)
 
@@ -284,6 +287,46 @@ def admin_approve():
         modified.status = int(event_proc)
         db_session.commit()
         return make_response(jsonify(errResponse(0, "Proceeded.")), 200)
+    else:
+        return make_response(jsonify(errResponse(-1, "No valid credential")), 403)
+
+
+@app.route('/api/admin/reset', methods=['POST'])
+def admin_resetuser():
+    user_auth = check_batcredential(request)
+    if user_auth[1] == 9:
+        req_username = request.form['username']
+        n_pwd = pwdgen(8)
+        n_salt = saltgen(8)
+        n_apikey = uuidgen()
+        n_hashpwd = md5(n_pwd.encode() + n_salt.encode).hexdigest()
+        # check if user exists
+        try:
+            # refresh the password
+            # if exists, update
+            # if not exists, error
+            corr_user = db_session.query(User).filter_by(username=req_username).one()
+            corr_user.password = n_hashpwd
+            corr_user.salt = n_salt
+            corr_user.apikey = n_apikey
+            corr_user.break_law = 0
+            db_session.commit()
+            # delete online sessions
+            all_cur_user_sessions = db_session.query(Session).filter_by(username=req_username).all()
+            if len(all_cur_user_sessions) > 0:
+                for online in all_cur_user_sessions:
+                    db_session.delete(online)
+                    db_session.commit()
+            return make_response(jsonify(
+                {
+                    "retcode": 0,
+                    "username": req_username,
+                    "password": n_pwd,
+                    "apikey": corr_user.apikey
+                }
+            ), 200)
+        except:
+            return make_response(jsonify(errResponse(-2, "Your username is invalid.")), 400)
     else:
         return make_response(jsonify(errResponse(-1, "No valid credential")), 403)
 

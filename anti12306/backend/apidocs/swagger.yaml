@@ -352,6 +352,51 @@ paths:
           description: "User token is invalid."
           schema:
             $ref: '#/definitions/ErrResponse'
+  /admin/reset:
+    post:
+      tags:
+        - "dev"
+        - "maintainer"
+      security:
+        - user_token: []
+      summary: "Password reset for administrator"
+      description: "Showed in Administrator Panel, Used for reset others\' password."
+      consumes:
+        - 'application/x-www-form-urlencoded'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: "formData"
+          name: "username"
+          type: string
+          required: true
+      responses:
+        200:
+          description: "Reset successfully finished."
+          schema:
+            type: object
+            properties:
+              retcode:
+                type: integer
+                format: int32
+                description: "Return status code."
+              username:
+                type: string
+                description: "Username."
+              password:
+                type: string
+                description: "New password."
+              apikey:
+                type: string
+                description: "New apikey."
+        400:
+          description: "Username invalid."
+          schema:
+            $ref: '#/definitions/ErrResponse'
+        403:
+          description: "Permission denied. Check your authentication method."
+          schema:
+            $ref: '#/definitions/ErrResponse'
   /admin/review:
     post:
       tags:
