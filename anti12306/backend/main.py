@@ -420,4 +420,6 @@ def shutdown_dbpool(exception=None):
     db_exit(db_session)
 
 
-app.run(host='0.0.0.0', port=8080, debug=False)
+if '__name__' == '__main__':
+    app.debug = False
+    app.run(host='127.0.0.1', port=58080, debug=False)

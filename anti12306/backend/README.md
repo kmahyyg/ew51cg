@@ -39,3 +39,26 @@ Including:
 ## Tensorflow Backend
 
 Check [Github: kmahyyg/anti12306](https://github.com/kmahyyg/anti12306). Still under construction. The `backcomm.py` in web backend is used for communicating purpose.
+
+# About Deployment
+
+Normally, the flask directly runs at 127.0.0.1:58080.
+
+Now We are using `gunicorn + Flask + Caddy WebServer` to deploy my app:
+
+```bash
+$ gunicorn -b 127.0.0.1:58081 --threads 4 -w 1 -D main:app
+```
+
+Then write `Caddyfile`:
+
+```yaml
+domain.tld {
+    root /var/www/project
+    proxy / 127.0.0.1:58081 {
+        transparent
+    }
+}
+```
+
+And finally start caddy webserver.
