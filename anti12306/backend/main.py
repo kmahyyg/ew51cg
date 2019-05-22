@@ -334,6 +334,15 @@ def cronjob():
                         pass
             else:
                 pass
+            # set fraud user to illegal
+            all_fraud_events = db_session.query(UploadEvent).filter_by(status=3).all()
+            if len(all_fraud_events) > 0:
+                for event in all_fraud_events:
+                    corresponding_user = db_session.query(User).filter_by(username=event.username).one()
+                    corresponding_user.break_law = 1
+                    db_session.commit()
+            else:
+                pass
             return make_response('', 204)
         except:
             return make_response(jsonify(errResponse(-5, "Internal Error")), 500)

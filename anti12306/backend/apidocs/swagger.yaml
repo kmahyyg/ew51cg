@@ -519,7 +519,8 @@ paths:
       security:
         - localhost: []
       summary: "Running at localhost for cleanup"
-      description: "Cleanup expired sessions & orders and run cron-ed job like refund"
+      description: "Cleanup expired sessions & orders and run cron-ed job like refund, all users with fraud abuse report
+      will be set to illegal."
       responses:
         204:
           description: "Successfully finished"
