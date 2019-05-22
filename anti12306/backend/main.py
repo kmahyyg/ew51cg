@@ -121,6 +121,7 @@ def batch_ocr2Text():
             newEvent.eventid = cur_evntid
             newEvent.chnchars = result[1]
             newEvent.recoged = result[0]
+            newEvent.upltime = int(time())
             db_session.add(newEvent)
             db_session.commit()
             if result[1] != 0:
@@ -139,6 +140,7 @@ def batch_ocr2Text():
             newEvent.eventid = cur_evntid
             newEvent.chnchars = result[1]
             newEvent.recoged = result[0]
+            newEvent.upltime = int(time())
             db_session.add(newEvent)
             db_session.commit()
             if result[1] != 0:
@@ -157,6 +159,7 @@ def batch_ocr2Text():
             newEvent.eventid = cur_evntid
             newEvent.chnchars = result[1]
             newEvent.recoged = result[0]
+            newEvent.upltime = int(time())
             db_session.add(newEvent)
             db_session.commit()
             if result[1] != 0:
