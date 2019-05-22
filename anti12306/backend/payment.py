@@ -45,6 +45,7 @@ def writeOrderData(orderjson):
             try:
                 db_session.add(new_order)
                 db_session.commit()
+                return new_order.orderid
             except:
                 db_session.rollback()
                 db_session.commit()
