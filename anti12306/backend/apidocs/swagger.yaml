@@ -360,7 +360,7 @@ paths:
       security:
         - user_token: []
       summary: "Password reset for administrator"
-      description: "Showed in Administrator Panel, Used for reset others\' password."
+      description: "Showed in Administrator Panel, Used for reset others' password."
       consumes:
         - 'application/x-www-form-urlencoded'
       produces:
