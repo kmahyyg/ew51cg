@@ -25,7 +25,7 @@ from base64 import b64decode
 def comm_tensor(photoStr):
     # photoStr: Base64 Encoded BARE photo WITHOUT any dataurl prefix.
     # Communicate with tensorflow backend, return Tuple(CHN char result, len(CHN))
-    dataresult = ("正在施工", 0)
+    dataresult = ("正在施工", 4)
     return dataresult
 
 
