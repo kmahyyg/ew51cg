@@ -8,6 +8,7 @@ from sqlalchemy.exc import *
 global db_session
 db_session = create_db_conn()
 
+
 def mark_as_waiting(eventid, username):
     try:
         suspecious_event = db_session.query(UploadEvent).filter_by(eventid=eventid).one()
