@@ -116,7 +116,11 @@ def batch_ocr2Text():
         if cur_usrobj.is_vip == 8 and cur_usrobj.balance > 150:
             result = comm_tensor(usr_photo)
             save_photo(usr_photo, cur_evntid)
-            newEvent = UploadEvent(usrname, cur_evntid, result[1], result[0])
+            newEvent = UploadEvent()
+            newEvent.username = usrname
+            newEvent.eventid = cur_evntid
+            newEvent.chnchars = result[1]
+            newEvent.recoged = result[0]
             db_session.add(newEvent)
             db_session.commit()
             if result[1] != 0:
@@ -130,7 +134,11 @@ def batch_ocr2Text():
         elif cur_usrobj.is_vip == 0 and cur_usrobj.balance > 150:
             result = comm_tensor(usr_photo)
             save_photo(usr_photo, cur_evntid)
-            newEvent = UploadEvent(usrname, cur_evntid, result[1], result[0])
+            newEvent = UploadEvent()
+            newEvent.username = usrname
+            newEvent.eventid = cur_evntid
+            newEvent.chnchars = result[1]
+            newEvent.recoged = result[0]
             db_session.add(newEvent)
             db_session.commit()
             if result[1] != 0:
