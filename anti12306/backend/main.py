@@ -33,8 +33,10 @@ from bankcomm import *
 from secrets import token_hex as saltgen
 from secrets import token_urlsafe as pwdgen
 from hashlib import md5
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 global db_session
 db_session = create_db_conn()
