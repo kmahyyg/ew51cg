@@ -36,7 +36,7 @@ def writeOrderData(orderjson):
         order_nm = orderjson['username']
         order_amount = float(orderjson['amount'])
         order_payment = orderjson['payment']
-        if (order_payment != 'py-pay') and (order_payment != 'alipay'):
+        if (order_payment != 'py_pay') and (order_payment != 'alipay'):
             return None
         else:
             new_order = Order(username=order_nm, amount=order_amount,
