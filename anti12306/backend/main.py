@@ -191,7 +191,7 @@ def createOrd():
             datadict = orderResponse(0, orderid)
             return make_response(jsonify(datadict), 200)
         else:
-            return make_response(jsonify(errResponse(-5, "Server error")), 500)
+            return make_response(jsonify(errResponse(-5, "Server validate error, check your input.")), 500)
     else:
         return make_response(jsonify(errResponse(-1, "Invalid Credentials")), 403)
 

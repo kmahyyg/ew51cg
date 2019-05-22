@@ -256,7 +256,7 @@ paths:
                 type: string
                 enum:
                   - "alipay"
-                  - "py-pay"
+                  - "py_pay"
       security:
         - user_token: []
       responses:
