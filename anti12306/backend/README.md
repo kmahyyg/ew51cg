@@ -47,7 +47,7 @@ Normally, the flask directly runs at 127.0.0.1:58080.
 Now We are using `gunicorn + Flask + Caddy WebServer` to deploy my app:
 
 ```bash
-$ gunicorn -b 127.0.0.1:58081 --threads 4 -w 1 -D main:app
+$ gunicorn -b 127.0.0.1:58081 --threads 4 -w 1 --log-syslog main:app
 ```
 
 Then write `Caddyfile`:
