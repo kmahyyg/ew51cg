@@ -203,11 +203,13 @@ def checkOrd():
         try:
             orderID = request.form['orderID']
         except KeyError:
-            return make_response(jsonify(errResponse(-1, "Invalid data")), 403)
+            return make_response(jsonify(errResponse(-1, "Invalid submit data")), 403)
         payment_status = check_payment(orderID)
         try:
             if payment_status["retcode"] != 0:
-                return make_response(jsonify(errResponse(-5, "Server error")), 500)
+                return make_response(jsonify(errResponse(-5, "Server validate error, check your input.")), 500)
+            else:
+                return make_response(jsonify(payment_status), 403)
         except KeyError:
             return make_response(jsonify(payment_status), 200)
     else:
