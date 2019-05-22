@@ -25,10 +25,6 @@ create trigger usrpwd before insert on users
     for each row begin set new.password = md5(concat(new.password,new.salt));
 end;
 
-create trigger usrpwd2 before update on users
-    for each row begin set new.password = md5(concat(new.password,new.salt));
-end;
-
 create trigger vip_change before update on users
     for each row
     begin

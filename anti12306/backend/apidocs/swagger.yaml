@@ -36,6 +36,7 @@ securityDefinitions:
     type: "apiKey"
     in: "header"
     name: "X-User-Token"
+    description: "The token generated while you trying to login into the frontend, this validation method will have higher priority."
   gateway:
     type: "apiKey"
     in: "header"
