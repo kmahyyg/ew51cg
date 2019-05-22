@@ -84,7 +84,6 @@ def frontend_token_renew(usrobj):
 
 
 def check_batcredential(usrreq):
-        # Check Type
     try:
         usr_token = usrreq.headers['X-User-Token']
     except KeyError:
@@ -103,10 +102,10 @@ def check_batcredential(usrreq):
         # If current_user is admin, return 9. If is_vip == True, return 8.
         # Return Format: Tuple (Username, ValidateStatus)
         try:
-            current_user = db_session.query(Session).filter(Session.usrtoken == usr_token).one()
-            if int(time()) - current_user.logged > TOKEN_EXPIRE_TIME:
+            current_sess = db_session.query(Session).filter_by(usrtoken=usr_token).one()
+            if int(time()) - current_sess.logged > TOKEN_EXPIRE_TIME:
                 # Token expired, please relogin.
-                db_session.delete(current_user)
+                db_session.delete(current_sess)
                 try:
                     db_session.commit()
                 except InvalidRequestError as e:
@@ -117,6 +116,7 @@ def check_batcredential(usrreq):
                 return data
             else:
                 # Token validated, go on
+                current_user = db_session.query(User).filter_by(username=current_sess.username).one()
                 if current_user.break_law == 0:
                     if current_user.is_vip == 9:
                         data = (current_user.username, 9)

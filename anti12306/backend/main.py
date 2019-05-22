@@ -84,7 +84,7 @@ def userlog():
         current_user = db_session.query(User).filter_by(username=usercreds_nm).one()
         user_activated = login_process(current_user, usercreds_pw)
         if user_activated < 0:
-            return make_response(jsonify(errResponse(user_activated, "Password not correct.")), 403)
+            return make_response(jsonify(errResponse(user_activated, "Permission Denied.")), 403)
         else:
             # get existing session, if null, create
             # else, check if expired, revoke and regenerate
