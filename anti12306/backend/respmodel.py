@@ -43,7 +43,7 @@ def authenticatedResponse(retcode, token):
 
 
 def uploadEventResponse(eventid, timestamp, cost):
-    if isinstance(timestamp, int) and isinstance(cost, float):
+    if isinstance(timestamp, str) and isinstance(cost, float):
         datadict = {"eventid": eventid, "timestamp": timestamp, "cost": cost}
         return datadict
     else:
