@@ -298,8 +298,8 @@ def admin_resetuser():
         req_username = request.form['username']
         n_pwd = pwdgen(8)
         n_salt = saltgen(8)
-        n_apikey = uuidgen()
-        n_hashpwd = md5(n_pwd.encode() + n_salt.encode).hexdigest()
+        n_apikey = str(uuidgen())
+        n_hashpwd = md5(n_pwd.encode() + n_salt.encode()).hexdigest()
         # check if user exists
         try:
             # refresh the password
