@@ -77,7 +77,7 @@ class UploadEvent(Base):
 
 
 def create_db_conn():
-    engine = create_engine(sqlconn, pool_pre_ping=True)
+    engine = create_engine(sqlconn, pool_pre_ping=True, pool_size=20, pool_recycle=600)
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     return session

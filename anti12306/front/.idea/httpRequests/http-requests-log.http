@@ -1,0 +1,6 @@
+OPTIONS http://127.0.0.1:58081/api/cron
+Origin: 127.0.0.1
+User-Agent: curl/7.64.1
+
+###
+

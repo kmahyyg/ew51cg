@@ -130,48 +130,55 @@
                             <input type="password" id="InputPassword" class="form-control" placeholder="Password" name="password" required>
                             <label for="InputPassword">Password</label>
                         </div>
-                        <input type="hidden" id="InputTimeStamp" name="_" value="">
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" id="submitbtn">Sign in</button>
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="button" onclick="submitForm();">Sign in</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div class="alert alert-dismissible" role="alert" id="alertAfterFailed" style="width: 70%; margin-left: 15%">
+    <strong id="alertInfo"></strong>
+</div>
 </body>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.8.2/css/all.css" integrity="sha256-39jKbsb/ty7s7+4WzbtELS4vq9udJ+MDjGTD5mtxHZ0=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fzFFyH01cBVPYzl16KT40wqjhgPtq6FFUB6ckN2+GGw=" crossorigin="anonymous"></script>
 <script type="text/javascript">
-    var current_timestamp = Math.floor(Date.now() / 1000);
-    document.getElementById('InputTimeStamp').value=current_timestamp;
-    $(document).ready(function () {
-        $('#submitbtn').click(function () {
-            $('#loginFrm').submit(
-                function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: 'http://localhost:58081/api/user/login',
-                        type: 'post',
-                        dataType: 'json',
-                        data: $(this).serialize()
-                    })
-                        .done(function (dataresp) {
-                            console.log("Successfully authenticated!");
-                            localStorage.setItem('X-User-Token', dataresp.token);
-                            window.location = '/dashboard.html';
-                        })
-                        .fail(function (dataresp) {
-                            alert(dataresp.responseJSON.retmsg);
-                            console.log("Invalid credentials.");
-                            window.location.reload();
-                            $('#loginFrm').find('input:text').val('');
-                            $('#loginFrm').find('input:password').val('');
-                        })
-                }
-            )
+    function showAlert(info_type, info) {
+        var alert_div = $("#alertAfterFailed");
+        alert_div.removeClass("alert-success");
+        alert_div.removeClass("alert-danger");
+        alert_div.addClass(info_type === "E" ? "alert-danger" : "alert-success");
+        $("#alertInfo").html(info);
+        alert_div.alert("show");
+        setTimeout(function () {
+            $(".alert").alert("close");
+        }, 5000);
+    }
+    function submitForm(){
+        var lgnform = $('#loginFrm');
+        var submit_dta = lgnform.serializeArray();
+        submit_dta.push({name: "_", value: Math.floor(Date.now() / 1000)});
+        $.ajax({
+            url: 'http://localhost:58081/api/user/login',
+            type: 'post',
+            dataType: 'json',
+            data: $.param(submit_dta)
         })
-    });
+            .done(function (dataresp) {
+                showAlert("S", "Successfully authenticated!");
+                console.log("Successfully authenticated!");
+                localStorage.setItem('X-User-Token', dataresp.token);
+                window.location = '/dashboard.html';
+            })
+            .fail(function (dataresp) {
+                showAlert("E", dataresp.responseJSON.retmsg + ' Please refresh and retry.');
+                console.log("Invalid credentials.");
+                lgnform.find('input:text').val('');
+                lgnform.find('input:password').val('');
+            });
+    }
 </script>
 <!-- Copyright (C) 2019 kmahyyg 20171120149 -->
 </html>
