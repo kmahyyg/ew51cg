@@ -44,7 +44,7 @@
         deepLinking: true,
         presets: [
           SwaggerUIBundle.presets.apis,
-          SwaggerUIStandalonePreset
+          SwaggerUIStandalonePreset.slice(1)
         ],
         plugins: [
           SwaggerUIBundle.plugins.DownloadUrl
@@ -55,11 +55,6 @@
 
       window.ui = ui
     }
-  </script>
-  <script>
-    var n1 = document.querySelector('#swagger-ui > section > div.topbar');
-    var n2 = document.querySelector('#swagger-ui > section');
-    n2.removeChild(n1);
   </script>
   </body>
 </html>
