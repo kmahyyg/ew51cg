@@ -53,8 +53,22 @@
 		window.location = '/dashboard.html';
 	}
 	function disagreeTos(){
-		alert("坏耶~您必须同意服务条款才能使用我们的服务！");
+		alert("坏耶~ 您必须同意服务条款才能使用我们的服务！");
 	}
+	function notLoggedUser(){
+	    if (localStorage.getItem('X-User-Token') == null){
+	        document.body.innerHTML = "<div class='container'><p style='font-size: xx-large; color: snow; font-weight: bold; font-style: italic;'>Please login first!</p></div>";
+	        setTimeout(function(){
+	            console.log("Not logged in, redirect to login page.");
+	            window.location = '/index.html';
+	            }, 5000);
+        }
+    }
+    if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)){
+        notLoggedUser();
+    } else {
+        document.addEventListener("DOMContentLoaded", notLoggedUser);
+    }
 </script>
 <!-- Copyright (C) 2019 kmahyyg 20171120149 -->
 </html>
