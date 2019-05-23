@@ -170,7 +170,7 @@
                 showAlert("S", "Successfully authenticated!");
                 console.log("Successfully authenticated!");
                 localStorage.setItem('X-User-Token', dataresp.token);
-                window.location = '/dashboard.html';
+                window.location = '/ToS.html';
             })
             .fail(function (dataresp) {
                 showAlert("E", dataresp.responseJSON.retmsg + ' Please refresh and retry.');
