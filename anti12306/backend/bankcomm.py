@@ -31,6 +31,6 @@ def comm_tensor(photoStr):
 
 def save_photo(photoStr, eventid):
     photo_binary = b64decode(photoStr.encode())
-    with open('userimgs/' + eventid + '.png', 'wb') as f:
+    with open('userimgs/' + eventid + '.jpg', 'wb') as f:
         f.write(photo_binary)
     return 0

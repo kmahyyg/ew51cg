@@ -101,8 +101,8 @@ def afterRecognitionResponse(eventid, retcode, retmsg, balance):
 def reviewUpldEvent(events):
     if events is not None and isinstance(events, UploadEvent):
         from base64 import b64encode
-        photo_data = "data:image/png;base64," + b64encode(
-            open("userimgs/" + events.eventid + ".png", "rb").read()).decode()
+        photo_data = "data:image/jpeg;base64," + b64encode(
+            open("userimgs/" + events.eventid + ".jpg", "rb").read()).decode()
         eachEvent = {"eventid": events.eventid, "photo": photo_data, "content": events.recoged}
         return eachEvent
     else:

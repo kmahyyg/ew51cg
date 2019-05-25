@@ -107,7 +107,7 @@ def batch_ocr2Text():
     # NOT DETECT REPLAY HERE: JUST LET USER PAY FOR WHAT THEY HAVE DONE!
     try:
         usr_photo = request.form['photo']  # Already encoded in base64.
-        usr_photo = usr_photo[22:]  # remove the prefix of dataurl: "data:image/png;base64,"
+        usr_photo = usr_photo[23:]  # remove the prefix of dataurl: "data:image/jpeg;base64,"
     except KeyError:
         return make_response(jsonify(errResponse(-1, "Photo invalid.")), 400)
     user_auth = check_batcredential(request)
