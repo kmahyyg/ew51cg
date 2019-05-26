@@ -313,6 +313,9 @@ def admin_resetuser():
     user_auth = check_batcredential(request)
     if user_auth[1] == 9:
         req_username = request.form['username']
+        req_timestamp = request.form['timestamp']
+        if int(time()) - int(req_timestamp) > REPLAY_TIMEOUT:
+            return make_response(jsonify(errResponse(-2, "Request too fast. Wait 15s. Thanks.")), 400)
         n_pwd = pwdgen(8)
         n_salt = saltgen(8)
         n_apikey = str(uuidgen())

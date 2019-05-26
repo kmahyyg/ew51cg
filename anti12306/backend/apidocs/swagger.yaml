@@ -370,6 +370,11 @@ paths:
           name: "username"
           type: string
           required: true
+        - name: "timestamp"
+          in: "formData"
+          type: integer
+          format: int32
+          required: true
       responses:
         200:
           description: "Reset successfully finished."
@@ -390,7 +395,7 @@ paths:
                 type: string
                 description: "New apikey."
         400:
-          description: "Username invalid."
+          description: "Username invalid. Or Replay Attack/Request too fast detected!"
           schema:
             $ref: '#/definitions/ErrResponse'
         403:
