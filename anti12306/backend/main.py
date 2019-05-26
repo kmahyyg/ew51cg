@@ -180,7 +180,7 @@ def batch_ocr2Text():
 def logout():
     # verify the host, then directly remove session in db
     # will not do the user verification
-    if request.host == 'anti12306.55lovecn.top':
+    if '55lovecn.top' in request.headers['Referer']:
         try:
             now_token = request.headers['X-User-Token']
             try:
