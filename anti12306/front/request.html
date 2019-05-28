@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <!-- https://bootsnipp.com/buttons -->
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <title>OCR Request - Anti12306</title>
+
+    <!-- Custom fonts for this project-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Page level plugin CSS-->
+    <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+    <!-- Custom styles for this project-->
+    <link href="css/sb-admin.css" rel="stylesheet">
+    <style>
+        #cardImg {
+            width: 90%;
+            margin-left: 5%;
+            margin-bottom: 20px;
+        }
+
+        #upldEvntResp {
+            width: 90%;
+            margin-left: 5%;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 768px) {
+            #cardImg {
+                width: 80%;
+                margin-left: 10%;
+            }
+        }
+
+        @media (min-width: 768px) {
+            #upldEvntResp {
+                width: 80%;
+                margin-left: 10%;
+            }
+        }
+    </style>
+</head>
+
+<body id="page-top">
+
+<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+
+    <a class="navbar-brand mr-1" href="dashboard.html">
+        <img class="rounded" src="imgs/avatar-yyg.jpg" width="30" height="30">
+        Anti12306 - WebUI
+    </a>
+
+    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" href="#" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navbar Search -->
+    <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0"></div>
+
+    <!-- Navbar -->
+    <ul class="navbar-nav ml-auto ml-md-0">
+        <li class="nav-item dropdown no-arrow">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+               id="userDropdown" role="button">
+                <i class="fas fa-user-circle fa-fw"></i>
+            </a>
+            <div aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" data-target="#logoutModal" data-toggle="modal" href="#">Logout</a>
+            </div>
+        </li>
+    </ul>
+
+</nav>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="dashboard.html">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item dropdown">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+               id="pagesDropdown" role="button">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Workflow</span>
+            </a>
+            <div aria-labelledby="pagesDropdown" class="dropdown-menu">
+                <h6 class="dropdown-header">Login Screens:</h6>
+                <a class="dropdown-item" href="login.html">Login</a>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">User Pages:</h6>
+                <a class="dropdown-item" href="dashboard.html">Dashboard</a>
+                <a class="dropdown-item active" href="request.html">OCR Now!</a>
+                <a class="dropdown-item" href="recharge.html">Recharge</a>
+                <a class="dropdown-item" href="history.html">History & Feedback</a>
+                <a class="dropdown-item" href="ToS.html">Term of Service</a>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Administrator Pages:</h6>
+                <a class="dropdown-item" href="adminmp.html">Review & Reset</a>
+            </div>
+        </li>
+    </ul>
+
+    <div id="content-wrapper">
+
+        <div class="container-fluid">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="dashboard.html">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">OCR Request</li>
+            </ol>
+
+            <!-- Page Content -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="card" id="cardImg">
+                        <div class="card-body">
+                            <form>
+                                <i class="fas fa-fw fa-cloud-upload-alt"></i>
+                                <label for="imageFileShow">Upload the CAPTCHA image in JPG format</label>
+                                <input accept="image/jpeg" class="form-control-file" id="imageFileShow" required type="file">
+                                <button class="btn btn-primary btn-labeled float-right" id="uploadFile" onclick="imgFromFile()"
+                                        type="button">
+                                    <span aria-hidden="true" class="fas fa-file-upload">  Upload file</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-center text-gray" id="previewPic">
+                    <div id="previewPicTitle" style="height: 190px; width: 100%;">
+                        <span>Choose file to see the preview of the file.</span>
+                    </div>
+                    <div class="justify-content-center row align-content-center" style="width: 100%;">
+                        <img alt="" id="previewPicImg" src="" style="display: none;"/>
+                    </div>
+                </div>
+                <div class="alert alert-dismissible" id="alertAfterFailed" role="alert" style="width: 70%; margin-left: 15%">
+                    <strong id="alertInfo"></strong>
+                </div>
+                <div class="card" id="upldEvntResp">
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-2" for="respEventID">UploadEvent ID</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="respEventID" placeholder="UploadEvent ID" readonly
+                                           type="text">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-2" for="respRecgResult">Recognition Result</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="respRecgResult" placeholder="Recognition Result"
+                                           readonly
+                                           type="text">
+                                </div>
+                            </div>
+                            <div class="form-group text-right">
+                                <button class="btn btn-danger btn-labeled" id="respReportErr" onclick="reportErrNow()"
+                                        type="button"><span aria-hidden="true" class="fas fa-bell">  Report Error</span>
+                                </button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright © Patrick Young 2019. All rights reserved.</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- /.content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="logoutModal" role="dialog"
+     tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Logout will revoke your current session token. Are you sure?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
+                <a class="btn btn-primary" href="login.html" onclick="logoutCleanup()">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin.min.js"></script>
+<!-- Custom business scripts -->
+<script src="js/common-anti12306.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", notLoggedUser);
+    function imgFromFile() {
+        // The photo file size should be 293*190 within 10kib
+        var photo_1 = $('#imageFileShow')[0].files[0];
+        var preview_url = URL.createObjectURL(photo_1);
+        var imageselc = $('#previewPicImg')[0];
+        imageselc.src = preview_url;
+        imageselc.style.display = 'block';
+        $('#previewPicTitle')[0].style.display = 'none';
+        var img = new Image();
+        img.onload = function () {
+            var cavs = document.createElement("canvas");
+            cavs.width = this.width;
+            cavs.height = this.height;
+            var ctx = cavs.getContext("2d");
+            ctx.drawImage(this, 0, 0);
+            var img_dataURL = cavs.toDataURL("image/jpeg");
+            $.ajax({
+                url: 'http://localhost:58081/api/startOCR',
+                type: 'post',
+                dataType: 'json',
+                headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
+                timeout: 3000,
+                data: "photo=" + img_dataURL +  "&timestamp=" + Math.floor(Date.now() / 1000)
+            })
+                .done(function (resp){
+                    $('#respEventID').val(resp.eventid);
+                    $('#respRecgResult').val(resp.retmsg);
+                    console.log("success.");
+                    document.getElementById('respReportErr').disabled = false;
+                })
+                .fail(function (resp){
+                    $('#respEventID').val("Click button to request");
+                    $('#respRecgResult').val("Click button to request");
+                    console.log(resp);
+                    document.getElementById('respReportErr').disabled = true;
+                });
+        };
+        img.src = preview_url;
+    }
+
+    function showAlert(info_type, info) {
+        var alert_div = $("#alertAfterFailed");
+        alert_div.removeClass("alert-success");
+        alert_div.removeClass("alert-danger");
+        alert_div.addClass(info_type === "E" ? "alert-danger" : "alert-success");
+        $("#alertInfo").html(info);
+        alert_div.alert("show");
+        setTimeout(function () {
+            $(".alert").alert("close");
+        }, 5000);
+    }
+
+    function reportErrNow() {
+        var evntid = document.getElementById('respEventID').value;
+        $.ajax({
+            url: 'http://localhost:58081/api/report/error',
+            type: 'post',
+            dataType: 'json',
+            headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
+            data: "eventid=" + evntid + "&timestamp=" + Math.floor(Date.now() / 1000)
+        })
+            .done(function(resp){
+                showAlert("S", resp.retmsg);
+            })
+            .fail(function(resp){
+                showAlert("E", resp.responseJSON.retmsg);
+                console.log(resp);
+                console.log("Failed to upload request.");
+            });
+    }
+</script>
+</body>
+</html>

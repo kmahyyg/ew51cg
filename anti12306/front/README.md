@@ -12,7 +12,7 @@ Origin: 127.0.0.1
 User-Agent: curl/7.xx
 ```
 
-## Login (index.html)
+## Login (login.html)
 
 - [X] | 用户登陆界面，提交表单，登陆验证。注册需要由管理员手动添加。
 
@@ -20,25 +20,27 @@ User-Agent: curl/7.xx
 
 管理员面板:
 
-- 用户重置用户凭据
-- 用户异常反馈审核 (表格处理)
+- [X] | 用户重置用户凭据
+- [X] | 用户异常反馈审核 (表格处理)
+
+Datatables 真香！
 
 ## Submit (request.html)
 
-用户提交 OCR 请求。
+- [X] |用户提交 OCR 请求。
 
 ## Recharge (recharge.html)
 
-用户创建订单，提交返回，验证订单状态。支持支付方式：Py_pay, Alipay.
+- [X] |用户创建订单，提交返回，验证订单状态。支持支付方式：Py_pay, Alipay.
 
 ## User History (history.html)
 
-返回用户已经提交的历史，允许用户提交异常反馈。
+- [ ] | 返回用户已经提交的历史，允许用户提交异常反馈。
 
 ## User Center (dashboard.html)
 
-- 用户登出，注销 Token
-- 显示用户状态，显示用户具体信息
+- [X] | 用户登出，注销 Token
+- [X] | 显示用户状态，显示用户具体信息
 
 ## Term of Service (ToS.html)
 
