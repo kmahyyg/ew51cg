@@ -6,6 +6,8 @@
 
 **final 分支中所有的作业均为下列独立完成，与小组其他成员无关！（小组成员消极殆工）**
 
+后端开发的 Commit 记录已经在此 Repo 下，如果您需要查看前端开发的 Commit 记录，请您移步 https://github.com/kmahyyg/octo-winner ，谢谢！
+
 ## 参与人员
 
 非常感谢：指导老师 刘东华 老师！
