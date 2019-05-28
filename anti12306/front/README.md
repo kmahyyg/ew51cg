@@ -2,16 +2,6 @@
 
 # Project Structure
 
-## 本地部署
-
-本地部署 Cron Job 清理错误识别、清理过期未付款订单、进行错误订单退款、清理过期 Session Token.
-
-```http request
-OPTIONS http://localhost:<PORT>/api/cron
-Origin: 127.0.0.1
-User-Agent: curl/7.xx
-```
-
 ## Login (login.html)
 
 - [X] | 用户登陆界面，提交表单，登陆验证。注册需要由管理员手动添加。
@@ -23,8 +13,6 @@ User-Agent: curl/7.xx
 - [X] | 用户重置用户凭据
 - [X] | 用户异常反馈审核 (表格处理)
 
-Datatables 真香！
-
 ## Submit (request.html)
 
 - [X] |用户提交 OCR 请求。
@@ -35,7 +23,7 @@ Datatables 真香！
 
 ## User History (history.html)
 
-- [ ] | 返回用户已经提交的历史，允许用户提交异常反馈。
+- [X] | 返回用户已经提交的历史，允许用户提交异常反馈。
 
 ## User Center (dashboard.html)
 
