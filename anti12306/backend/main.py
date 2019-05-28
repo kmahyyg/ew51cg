@@ -221,7 +221,7 @@ def checkOrd():
     user_auth = check_batcredential(request)
     if user_auth[1] >= 0:
         try:
-            orderID = request.form['orderID']
+            orderID = request.args.get('orderID')
         except KeyError:
             return make_response(jsonify(errResponse(-1, "Invalid submit data")), 403)
         payment_status = check_payment(orderID)
