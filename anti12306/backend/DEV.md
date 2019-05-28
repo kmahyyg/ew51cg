@@ -1,8 +1,10 @@
 # 关于用户验证
 
+传输过程使用 HTTPS 保证传输安全。
+
 用户验证的 salt 使用 Python 3 内置库 secrets.token_hex(8) 生成 16 位字符串。
 
-用户验证可以使用 APIKEY 或者 前端界面使用的 USR_TOKEN 方式验证，这几个参数由前端保存到站点的 Localstorage，由 Jquery 读出后按照 API 文档作为 Header 方式发送出来。
+用户验证可以使用 APIKEY 或者 前端界面使用的 USR_TOKEN 方式验证，这几个参数由前端保存到站点的 LocalStorage，由 jQuery 读出后按照 API 文档作为 Header 方式发送出来。
 
 # 内部API
 
@@ -60,9 +62,11 @@
 
 # 踩的坑
 
-- 数据库触发器定义异常不一定能在创建时显示出来，但插入数据时会有些莫名奇妙的错误代码，应当检查相关约束、触发器
+- 数据库触发器定义异常不一定能在创建时显示出来，但插入数据时会有些莫名奇妙的错误代码，应当检查相关约束、触发器，并尽量避免使用过多触发器
 - `Sqlalchemy` 使用 `session.query.filter.one()` 返回可能引起的 Exception 有：
     `InvalidRequestError`, `NoResultFound`, `MultipleResultsFound` 
     均包含在 `sqlalchemy.orm.exc.*` / `sqlalchemy.exc.*`
 - 数据库为了避免 UUID 在 M-S 模式下出现全局不唯一的情况，UUID 的生成应当在处理服务器完成，而不是使用 SQL 服务器内建函数 `UUID()`
 - 传输到服务器的 HTTP Form 内的数据，类型全为 String，需要自主转换
+- GET 方式的 HTTP Form 实际是 HTTP URL Parameter 处理
+- 前端的 jQuery 上传数据需要注意格式和请求处理，POST JSON 需要使用 `JSON.stringify()` 并设定 `Content-Type`
