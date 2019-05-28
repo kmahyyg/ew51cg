@@ -22,11 +22,11 @@ Check [API Reference](/apidocs/reference.html) for API reference.
 
 ## Web Frontend
 
-Write in `mdbootstrap` and `jQuery`, the working procedure:
+Write in `bootstrap` and `jQuery`, the working procedure:
 
 Login -> Recharge -> Check balance and permission -> Upload photo -> Get result and UUID in JSON
 
-Login -> Report error or not satisfied with UUID
+Login -> Report error or not satisfied events with UUID
 
 Including: 
 
