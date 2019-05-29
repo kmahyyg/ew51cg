@@ -219,7 +219,7 @@
     function resetUsrPWD() {
         var usernm = document.getElementById('iptUsrNMReset').value;
         $.ajax({
-            url: 'http://localhost:58081/api/admin/reset',
+            url: 'https://anti12306.55lovecn.top/api/admin/reset',
             type: 'post',
             dataType: 'json',
             headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
@@ -246,7 +246,7 @@
     });
     $(document).ready(function () {
         $.ajax({
-            url: 'http://localhost:58081/api/admin/review',
+            url: 'https://anti12306.55lovecn.top/api/admin/review',
             type: 'get',
             dataType: 'json',
             timeout: 3000,

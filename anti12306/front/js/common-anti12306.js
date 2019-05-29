@@ -11,7 +11,7 @@ function notLoggedUser(){
 
 function logoutCleanup(){
     $.ajax({
-        url: 'http://localhost:58081/api/user/logout',
+        url: 'https://anti12306.55lovecn.top/api/user/logout',
         type: 'get',
         dataType: 'text',
         timeout: 1500,
@@ -32,7 +32,7 @@ function abuseUpload(tbtn){
     var evntid = tbtn.parentNode.parentNode.firstChild.innerText;
     var reptdt = "eventid=" + evntid + "&op=3";
     $.ajax({
-        url: 'http://localhost:58081/api/admin/review',
+        url: 'https://anti12306.55lovecn.top/api/admin/review',
         type: 'post',
         datatype: 'json',
         headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
@@ -60,7 +60,7 @@ function failRecgUpld(tbtn){
     var evntid = tbtn.parentNode.parentNode.firstChild.innerText;
     var reptdt = "eventid=" + evntid + "&op=2";
     $.ajax({
-        url: 'http://localhost:58081/api/admin/review',
+        url: 'https://anti12306.55lovecn.top/api/admin/review',
         type: 'post',
         datatype: 'json',
         headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
@@ -87,7 +87,7 @@ function failRecgUpld(tbtn){
 function userReportFail(tbtn){
     var evntid = tbtn.parentNode.parentNode.firstChild.innerText;
     $.ajax({
-        url: 'http://localhost:58081/api/report/error',
+        url: 'https://anti12306.55lovecn.top/api/report/error',
         type: 'post',
         dataType: 'json',
         headers: {'X-User-Token': localStorage.getItem('X-User-Token')},

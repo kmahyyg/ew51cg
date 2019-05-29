@@ -250,7 +250,7 @@
     }
     function alipayRecharge() {
         $.ajax({
-            url: 'http://localhost:58081/api/user/createOrder',
+            url: 'https://anti12306.55lovecn.top/api/user/createOrder',
             type: 'post',
             dataType: 'json',
             data: JSON.stringify(buildOrder("alipay")),
@@ -289,7 +289,7 @@
 
     function pypayRecharge() {
         $.ajax({
-            url: 'http://localhost:58081/api/user/createOrder',
+            url: 'https://anti12306.55lovecn.top/api/user/createOrder',
             type: 'post',
             dataType: 'json',
             data: JSON.stringify(buildOrder("py_pay")),
@@ -318,7 +318,7 @@
             throw "Input value error";
         }
         $.ajax({
-            url: 'http://localhost:58081/api/user/checkOrder',
+            url: 'https://anti12306.55lovecn.top/api/user/checkOrder',
             type: 'get',
             dataType: 'json',
             data: "orderID=" + r_orderid,

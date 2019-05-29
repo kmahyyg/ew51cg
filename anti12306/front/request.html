@@ -253,7 +253,7 @@
             ctx.drawImage(this, 0, 0);
             var img_dataURL = cavs.toDataURL("image/jpeg");
             $.ajax({
-                url: 'http://localhost:58081/api/startOCR',
+                url: 'https://anti12306.55lovecn.top/api/startOCR',
                 type: 'post',
                 dataType: 'json',
                 headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
@@ -291,7 +291,7 @@
     function reportErrNow() {
         var evntid = document.getElementById('respEventID').value;
         $.ajax({
-            url: 'http://localhost:58081/api/report/error',
+            url: 'https://anti12306.55lovecn.top/api/report/error',
             type: 'post',
             dataType: 'json',
             headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
