@@ -116,8 +116,8 @@ def batch_ocr2Text():
         cur_evntid = str(uuidgen())
         cur_usrobj = db_session.query(User).filter_by(username=usrname).one()
         if cur_usrobj.is_vip == 8 and cur_usrobj.balance > 150:
-            result = comm_tensor(usr_photo)
             save_photo(usr_photo, cur_evntid)
+            result = comm_tensor(cur_evntid)
             newEvent = UploadEvent()
             newEvent.username = usrname
             newEvent.eventid = cur_evntid
@@ -135,8 +135,8 @@ def batch_ocr2Text():
             else:
                 return make_response(jsonify(errResponse(-5, "Recognition failed.")), 500)
         elif cur_usrobj.is_vip == 0 and cur_usrobj.balance > 150:
-            result = comm_tensor(usr_photo)
             save_photo(usr_photo, cur_evntid)
+            result = comm_tensor(cur_evntid)
             newEvent = UploadEvent()
             newEvent.username = usrname
             newEvent.eventid = cur_evntid
@@ -154,8 +154,8 @@ def batch_ocr2Text():
             else:
                 return make_response(jsonify(errResponse(-5, "Recognition failed.")), 500)
         elif cur_usrobj.is_vip == 9:
-            result = comm_tensor(usr_photo)
             save_photo(usr_photo, cur_evntid)
+            result = comm_tensor(cur_evntid)
             newEvent = UploadEvent()
             newEvent.username = usrname
             newEvent.eventid = cur_evntid

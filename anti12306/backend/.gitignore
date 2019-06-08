@@ -209,4 +209,3 @@ fabric.properties
 sslcerts/
 config.json
 apikey.py
-userimgs/

@@ -4,6 +4,14 @@ This project is the backend part of my computer vision project in web.
 
 The backend is running via `Tensorflow` and `Keras` cooperating with MariaDB.
 
+# Before Use
+
+**READ VERY CAREFULLY!**
+
+- Copy `apikey.example.py` to `apikey.py` and change the Database Connection Link
+- Put the model you trained in `trained_models`, and rename them to `model_current.ckpt`
+- Make sure you are in a Calamari Pre-installed Environment which `$PATH` should have already been correct set.
+
 # The frontend
 
 Running via `caddy` server and served inside the YNU network for experimental purposes.

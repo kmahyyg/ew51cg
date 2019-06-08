@@ -20,13 +20,33 @@
 # Filename: bankcomm.py
 
 from base64 import b64decode
+import shutil
+import subprocess
+import os
 
 
-def comm_tensor(photoStr):
-    # photoStr: Base64 Encoded BARE photo WITHOUT any dataurl prefix.
-    # Communicate with tensorflow backend, return Tuple(CHN char result, len(CHN))
-    dataresult = ("正在施工", 4)
-    return dataresult
+def comm_tensor(eventid):
+    try:
+        if shutil.which("calamari-predict") is None:
+            raise ModuleNotFoundError
+        else:
+            pass
+    except ModuleNotFoundError:
+        dataresult = ("内部错误", 4)
+        return dataresult
+    # Open models
+    model_path = os.getcwd() + "/trained_models/model_current.ckpt"
+    usrimgfn = os.getcwd() + "/userimgs/" + eventid + ".jpg"
+    cpproc = subprocess.run(['calamari-predict', "--checkpoint", model_path, "--files", usrimgfn], timeout=10)
+    if cpproc.returncode != 0:
+        dataresult = ("内部错误", 4)
+        return dataresult
+    else:
+        # Communicate with tensorflow backend, return Tuple(CHN char result, len(CHN))
+        usrOCRfd = os.getcwd() + "/userimgs/" + eventid + ".pred.txt"
+        usrocrreslt = open(usrOCRfd, 'r').read()
+        dataresult = (usrocrreslt, len(usrocrreslt))
+        return dataresult
 
 
 def save_photo(photoStr, eventid):
