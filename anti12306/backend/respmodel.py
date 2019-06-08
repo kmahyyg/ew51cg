@@ -101,9 +101,13 @@ def afterRecognitionResponse(eventid, retcode, retmsg, balance):
 def reviewUpldEvent(events):
     if events is not None and isinstance(events, UploadEvent):
         from base64 import b64encode
-        photo_data = "data:image/jpeg;base64," + b64encode(
-            open("userimgs/" + events.eventid + ".jpg", "rb").read()).decode()
+        try:
+            fd = open("userimgs/" + events.eventid + ".jpg", "rb").read()
+            photo_data = "data:image/jpeg;base64," + b64encode(fd).decode()
+        except:
+            photo_data = ""
         eachEvent = {"eventid": events.eventid, "photo": photo_data, "content": events.recoged}
         return eachEvent
     else:
         raise AssertionError("Illegal data input!")
+
