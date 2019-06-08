@@ -32,7 +32,7 @@ def comm_tensor(eventid):
         else:
             pass
     except ModuleNotFoundError:
-        dataresult = ("内部错误", 4)
+        dataresult = ("内部错误1", 4)
         return dataresult
     # Open models
     model_path = os.getcwd() + "/trained_models/model_current.ckpt"
@@ -40,7 +40,7 @@ def comm_tensor(eventid):
     try:
         cpproc = subprocess.run(['calamari-predict', "--checkpoint", model_path, "--files", usrimgfn], timeout=10)
         if cpproc.returncode != 0:
-            dataresult = ("内部错误", 4)
+            dataresult = ("内部错误2", 4)
             return dataresult
         else:
             # Communicate with tensorflow backend, return Tuple(CHN char result, len(CHN))
@@ -49,7 +49,7 @@ def comm_tensor(eventid):
             dataresult = (usrocrreslt, len(usrocrreslt))
             return dataresult
     except:
-        dataresult = ("内部错误", 4)
+        dataresult = ("内部错误3", 4)
         return dataresult
 
 
