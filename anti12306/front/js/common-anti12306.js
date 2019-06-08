@@ -14,7 +14,7 @@ function logoutCleanup(){
         url: 'https://anti12306.55lovecn.top/api/user/logout',
         type: 'get',
         dataType: 'text',
-        timeout: 1500,
+        timeout: 15000,
         headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
     })
         .done(function (dataresp){
@@ -36,7 +36,7 @@ function abuseUpload(tbtn){
         type: 'post',
         datatype: 'json',
         headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
-        timeout: 3000,
+        timeout: 30000,
         data: reptdt
     })
         .done(function (resp){
@@ -64,7 +64,7 @@ function failRecgUpld(tbtn){
         type: 'post',
         datatype: 'json',
         headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
-        timeout: 3000,
+        timeout: 30000,
         data: reptdt
     })
         .done(function (resp){
@@ -91,7 +91,7 @@ function userReportFail(tbtn){
         type: 'post',
         dataType: 'json',
         headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
-        timeout: 3000,
+        timeout: 30000,
         data: "eventid=" + evntid +  "&timestamp=" + Math.floor(Date.now() / 1000)
     })
         .done(function (dataresp){

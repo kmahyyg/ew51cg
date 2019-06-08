@@ -223,7 +223,7 @@
             type: 'post',
             dataType: 'json',
             headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
-            timeout: 3000,
+            timeout: 30000,
             data: "username=" + usernm +  "&timestamp=" + Math.floor(Date.now() / 1000)
         })
             .done(function (dataresp){
@@ -249,7 +249,7 @@
             url: 'https://anti12306.55lovecn.top/api/admin/review',
             type: 'get',
             dataType: 'json',
-            timeout: 3000,
+            timeout: 30000,
             headers: {'X-User-Token': localStorage.getItem('X-User-Token')}
         })
             .done(function (dataresp) {

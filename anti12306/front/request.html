@@ -257,7 +257,7 @@
                 type: 'post',
                 dataType: 'json',
                 headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
-                timeout: 3000,
+                timeout: 30000,
                 data: "photo=" + img_dataURL +  "&timestamp=" + Math.floor(Date.now() / 1000)
             })
                 .done(function (resp){

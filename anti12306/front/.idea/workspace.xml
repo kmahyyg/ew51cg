@@ -16,8 +16,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/common-anti12306.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="84" column="1" lean-forward="true" selection-start-line="84" selection-start-column="1" selection-end-line="84" selection-end-column="1" />
+            <state relative-caret-position="288">
+              <caret line="26" column="42" lean-forward="true" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -121,8 +125,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>logout</find>
-      <find>class=&quot;hi</find>
       <find>custom-pad</find>
       <find>input</find>
       <find>png</find>
@@ -151,6 +153,8 @@
       <find>check your inter</find>
       <find>settimeout</find>
       <find>http://localhost:58081</find>
+      <find>timeout</find>
+      <find>timeout:</find>
     </findStrings>
     <replaceStrings>
       <replace>Logout will revoke your current session token. Are you sure?</replace>
@@ -175,15 +179,15 @@
         <option value="$PROJECT_DIR$/tables.html" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.html" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/dashboard.html" />
         <option value="$PROJECT_DIR$/ToS.html" />
-        <option value="$PROJECT_DIR$/request.html" />
-        <option value="$PROJECT_DIR$/recharge.html" />
         <option value="$PROJECT_DIR$/login.html" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/history.html" />
-        <option value="$PROJECT_DIR$/adminmp.html" />
         <option value="$PROJECT_DIR$/js/common-anti12306.js" />
+        <option value="$PROJECT_DIR$/dashboard.html" />
+        <option value="$PROJECT_DIR$/history.html" />
+        <option value="$PROJECT_DIR$/recharge.html" />
+        <option value="$PROJECT_DIR$/adminmp.html" />
+        <option value="$PROJECT_DIR$/request.html" />
       </list>
     </option>
   </component>
@@ -264,11 +268,12 @@
       <workItem from="1559003708994" duration="8561000" />
       <workItem from="1559015938111" duration="4217000" />
       <workItem from="1559143998030" duration="64000" />
+      <workItem from="1559998809954" duration="216000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="98387000" />
+    <option name="totallyTimeSpent" value="98603000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -363,8 +368,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/common-anti12306.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="84" column="1" lean-forward="true" selection-start-line="84" selection-start-column="1" selection-end-line="84" selection-end-column="1" />
+        <state relative-caret-position="288">
+          <caret line="26" column="42" lean-forward="true" selection-start-line="26" selection-start-column="42" selection-end-line="26" selection-end-column="42" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
