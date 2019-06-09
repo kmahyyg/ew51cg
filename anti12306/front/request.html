@@ -249,16 +249,6 @@
         imageselc.src = preview_url;
         imageselc.style.display = 'block';
         $('#previewPicTitle')[0].style.display = 'none';
-        var img = new Image();
-        img.onload = function () {
-            // create canvas to show preview
-            var cavs = document.createElement("canvas");
-            cavs.width = this.width;
-            cavs.height = this.height;
-            var ctx = cavs.getContext("2d");
-            ctx.drawImage(this, 0, 0);
-        };
-        img.src = preview_url;
         //submit data
         $.ajax({
             url: 'https://anti12306.55lovecn.top/api/startOCR',
