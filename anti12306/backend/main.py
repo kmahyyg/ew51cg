@@ -104,7 +104,6 @@ def userlog():
 
 @app.route('/api/startOCR', methods=['POST'])
 def batch_ocr2Text():
-    # NOT DETECT REPLAY HERE: JUST LET USER PAY FOR WHAT THEY HAVE DONE!
     userIpt_time = request.form['timestamp']
     try:
         if int(time()) - int(userIpt_time) > REPLAY_TIMEOUT:
@@ -113,6 +112,8 @@ def batch_ocr2Text():
         return make_response(jsonify(errResponse(-1, "Invalid request!")), 400)
     user_auth = check_batcredential(request)
     userIpt_imgfd = request.files['photo']
+    if len(userIpt_imgfd) == 0:
+        return make_response(jsonify(errResponse(-1, "Invalid request!")), 400)
     if user_auth[1] >= 0:
         usrname = user_auth[0]
         cur_evntid = str(uuidgen())
