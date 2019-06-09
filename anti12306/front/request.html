@@ -257,28 +257,29 @@
             cavs.height = this.height;
             var ctx = cavs.getContext("2d");
             ctx.drawImage(this, 0, 0);
-            $.ajax({
-                url: 'https://anti12306.55lovecn.top/api/startOCR',
-                type: 'post',
-                dataType: 'json',
-                headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
-                timeout: 30000,
-                data: formIpt
-            })
-                .done(function (resp){
-                    $('#respEventID').val(resp.eventid);
-                    $('#respRecgResult').val(resp.retmsg);
-                    console.log("success.");
-                    document.getElementById('respReportErr').disabled = false;
-                })
-                .fail(function (resp){
-                    $('#respEventID').val("Click button to request");
-                    $('#respRecgResult').val("Click button to request");
-                    console.log(resp);
-                    document.getElementById('respReportErr').disabled = true;
-                });
         };
         img.src = preview_url;
+        //submit data
+        $.ajax({
+            url: 'https://anti12306.55lovecn.top/api/startOCR',
+            type: 'post',
+            dataType: 'json',
+            headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
+            timeout: 30000,
+            data: formIpt
+        })
+            .done(function (resp){
+                $('#respEventID').val(resp.eventid);
+                $('#respRecgResult').val(resp.retmsg);
+                console.log("success.");
+                document.getElementById('respReportErr').disabled = false;
+            })
+            .fail(function (resp){
+                $('#respEventID').val("Click button to request");
+                $('#respRecgResult').val("Click button to request");
+                console.log(resp);
+                document.getElementById('respReportErr').disabled = true;
+            });
     }
 
     function showAlert(info_type, info) {
