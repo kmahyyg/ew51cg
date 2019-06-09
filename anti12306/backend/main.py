@@ -111,8 +111,9 @@ def batch_ocr2Text():
     except KeyError:
         return make_response(jsonify(errResponse(-1, "Invalid request!")), 400)
     user_auth = check_batcredential(request)
-    userIpt_imgfd = request.files['photo']
-    if len(userIpt_imgfd) == 0:
+    try:
+        userIpt_imgfd = request.files['photo']
+    except:
         return make_response(jsonify(errResponse(-1, "Invalid request!")), 400)
     if user_auth[1] >= 0:
         usrname = user_auth[0]
