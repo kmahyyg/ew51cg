@@ -127,7 +127,7 @@
                 <div class="row">
                     <div class="card" id="cardImg">
                         <div class="card-body">
-                            <form>
+                            <form id="upldPhoto" enctype="multipart/form-data">
                                 <i class="fas fa-fw fa-cloud-upload-alt"></i>
                                 <label for="imageFileShow">Upload the CAPTCHA image in JPG format</label>
                                 <input accept="image/jpeg" class="form-control-file" id="imageFileShow" required type="file">
@@ -237,8 +237,13 @@
 <script>
     document.addEventListener("DOMContentLoaded", notLoggedUser);
     function imgFromFile() {
-        // The photo file size should be 293*190 within 10kib
+        // The photo file size should be 120*48 within 10kib
         var photo_1 = $('#imageFileShow')[0].files[0];
+        // create multipart form
+        var formIpt = new FormData();
+        formIpt.set('photo', photo_1);
+        formIpt.set('timestamp', Math.floor(Date.now() / 1000).toString());
+        // preview create
         var preview_url = URL.createObjectURL(photo_1);
         var imageselc = $('#previewPicImg')[0];
         imageselc.src = preview_url;
@@ -246,19 +251,19 @@
         $('#previewPicTitle')[0].style.display = 'none';
         var img = new Image();
         img.onload = function () {
+            // create canvas to show preview
             var cavs = document.createElement("canvas");
             cavs.width = this.width;
             cavs.height = this.height;
             var ctx = cavs.getContext("2d");
             ctx.drawImage(this, 0, 0);
-            var img_dataURL = cavs.toDataURL("image/jpeg");
             $.ajax({
                 url: 'https://anti12306.55lovecn.top/api/startOCR',
                 type: 'post',
                 dataType: 'json',
                 headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
                 timeout: 30000,
-                data: "photo=" + img_dataURL +  "&timestamp=" + Math.floor(Date.now() / 1000)
+                data: formIpt
             })
                 .done(function (resp){
                     $('#respEventID').val(resp.eventid);

@@ -105,22 +105,13 @@ def userlog():
 @app.route('/api/startOCR', methods=['POST'])
 def batch_ocr2Text():
     # NOT DETECT REPLAY HERE: JUST LET USER PAY FOR WHAT THEY HAVE DONE!
-    try:
-        usr_photo = request.form['photo']  # Already encoded in base64.
-        usr_photo = usr_photo[23:]  # remove the prefix of dataurl: "data:image/jpeg;base64,"
-    except KeyError:
-        return make_response(jsonify(errResponse(-1, "Photo invalid.")), 400)
     user_auth = check_batcredential(request)
     if user_auth[1] >= 0:
         usrname = user_auth[0]
         cur_evntid = str(uuidgen())
         cur_usrobj = db_session.query(User).filter_by(username=usrname).one()
         if cur_usrobj.is_vip == 8 and cur_usrobj.balance > 150:
-            try:
-                save_photo(usr_photo, cur_evntid)
-                result = comm_tensor(cur_evntid)
-            except:
-                result = ("图片不合法", 1)
+            #TODO: Tensorflow and save images, return: result == tuple(text, length)
             newEvent = UploadEvent()
             newEvent.username = usrname
             newEvent.eventid = cur_evntid
@@ -138,11 +129,7 @@ def batch_ocr2Text():
             else:
                 return make_response(jsonify(errResponse(-5, "Recognition failed.")), 500)
         elif cur_usrobj.is_vip == 0 and cur_usrobj.balance > 150:
-            try:
-                save_photo(usr_photo, cur_evntid)
-                result = comm_tensor(cur_evntid)
-            except:
-                result = ("图片不合法", 1)
+            # TODO: Tensorflow and save images, return: result == tuple(text, length)
             newEvent = UploadEvent()
             newEvent.username = usrname
             newEvent.eventid = cur_evntid
@@ -160,11 +147,7 @@ def batch_ocr2Text():
             else:
                 return make_response(jsonify(errResponse(-5, "Recognition failed.")), 500)
         elif cur_usrobj.is_vip == 9:
-            try:
-                save_photo(usr_photo, cur_evntid)
-                result = comm_tensor(cur_evntid)
-            except:
-                result = ("图片不合法", 1)
+            # TODO: Tensorflow and save images, return: result == tuple(text, length)
             newEvent = UploadEvent()
             newEvent.username = usrname
             newEvent.eventid = cur_evntid
