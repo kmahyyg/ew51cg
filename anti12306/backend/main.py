@@ -105,13 +105,21 @@ def userlog():
 @app.route('/api/startOCR', methods=['POST'])
 def batch_ocr2Text():
     # NOT DETECT REPLAY HERE: JUST LET USER PAY FOR WHAT THEY HAVE DONE!
+    userIpt_time = request.form['timestamp']
+    try:
+        if int(time()) - int(userIpt_time) > REPLAY_TIMEOUT:
+            raise KeyError
+    except KeyError:
+        return make_response(jsonify(errResponse(-1, "Invalid request!")), 400)
     user_auth = check_batcredential(request)
+    userIpt_imgfd = request.files['photo']
     if user_auth[1] >= 0:
         usrname = user_auth[0]
         cur_evntid = str(uuidgen())
         cur_usrobj = db_session.query(User).filter_by(username=usrname).one()
         if cur_usrobj.is_vip == 8 and cur_usrobj.balance > 150:
-            #TODO: Tensorflow and save images, return: result == tuple(text, length)
+            save_photo(userIpt_imgfd, cur_evntid)
+            result = comm_tensor(cur_evntid)
             newEvent = UploadEvent()
             newEvent.username = usrname
             newEvent.eventid = cur_evntid
@@ -129,7 +137,8 @@ def batch_ocr2Text():
             else:
                 return make_response(jsonify(errResponse(-5, "Recognition failed.")), 500)
         elif cur_usrobj.is_vip == 0 and cur_usrobj.balance > 150:
-            # TODO: Tensorflow and save images, return: result == tuple(text, length)
+            save_photo(userIpt_imgfd, cur_evntid)
+            result = comm_tensor(cur_evntid)
             newEvent = UploadEvent()
             newEvent.username = usrname
             newEvent.eventid = cur_evntid
@@ -147,7 +156,8 @@ def batch_ocr2Text():
             else:
                 return make_response(jsonify(errResponse(-5, "Recognition failed.")), 500)
         elif cur_usrobj.is_vip == 9:
-            # TODO: Tensorflow and save images, return: result == tuple(text, length)
+            save_photo(userIpt_imgfd, cur_evntid)
+            result = comm_tensor(cur_evntid)
             newEvent = UploadEvent()
             newEvent.username = usrname
             newEvent.eventid = cur_evntid
