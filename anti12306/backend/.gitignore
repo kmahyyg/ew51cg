@@ -209,4 +209,6 @@ fabric.properties
 sslcerts/
 config.json
 apikey.py
-*.ckpt*
+trained_models/*.ckpt*
+userimgs/*.jpg
+userimgs/*.png
