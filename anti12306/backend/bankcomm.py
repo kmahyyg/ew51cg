@@ -55,6 +55,6 @@ def comm_tensor(eventid):
 
 
 def save_photo(photoObj, eventid):
-    fileloc = os.getcwd() + 'userimgs/' + eventid + '.jpg'
+    fileloc = os.getcwd() + '/userimgs/' + eventid + '.jpg'
     photoObj.save(fileloc)
     return 0
