@@ -38,7 +38,6 @@ def comm_tensor(eventid):
     model_path = os.getcwd() + "/trained_models/model_current.ckpt"
     usrimgfn = os.getcwd() + "/userimgs/" + eventid + ".jpg"
     runstr = "calamari-predict --checkpoint " + model_path + " --files " + usrimgfn
-    print(runstr)
     try:
         cpproc = subprocess.run(runstr, timeout=10)
         if cpproc.returncode != 0:
