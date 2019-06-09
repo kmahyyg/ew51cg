@@ -38,19 +38,15 @@ def comm_tensor(eventid):
     model_path = os.getcwd() + "/trained_models/model_current.ckpt"
     usrimgfn = os.getcwd() + "/userimgs/" + eventid + ".jpg"
     runstr = "calamari-predict --checkpoint " + model_path + " --files " + usrimgfn
-    try:
-        cpproc = subprocess.run(runstr, timeout=10)
-        if cpproc.returncode != 0:
-            dataresult = ("内部错误2", 4)
-            return dataresult
-        else:
-            # Communicate with tensorflow backend, return Tuple(CHN char result, len(CHN))
-            usrOCRfd = os.getcwd() + "/userimgs/" + eventid + ".pred.txt"
-            usrocrreslt = open(usrOCRfd, 'r').read()
-            dataresult = (usrocrreslt, len(usrocrreslt))
-            return dataresult
-    except:
-        dataresult = ("内部错误3", 4)
+    cpproc = subprocess.run(runstr, timeout=10)
+    if cpproc.returncode != 0:
+        dataresult = ("内部错误2", 4)
+        return dataresult
+    else:
+        # Communicate with tensorflow backend, return Tuple(CHN char result, len(CHN))
+        usrOCRfd = os.getcwd() + "/userimgs/" + eventid + ".pred.txt"
+        usrocrreslt = open(usrOCRfd, 'r').read()
+        dataresult = (usrocrreslt, len(usrocrreslt))
         return dataresult
 
 
