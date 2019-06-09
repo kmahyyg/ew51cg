@@ -266,7 +266,10 @@
             dataType: 'json',
             headers: {'X-User-Token': localStorage.getItem('X-User-Token')},
             timeout: 30000,
-            data: formIpt
+            data: formIpt,
+            cache: false,
+            contentType: false,
+            processData: false
         })
             .done(function (resp){
                 $('#respEventID').val(resp.eventid);
