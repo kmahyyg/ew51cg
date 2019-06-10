@@ -29,6 +29,9 @@ import sys
 if platform.system() != 'Linux':
     print("Our software only allowed to be run on Linux. Exit now.")
     sys.exit(99)
+    if sys.version_info[0] != 3:
+        print("Our software only allowed to be run on Python 3. Exit now.")
+        sys.exit(98)
 else:
     pass
 
