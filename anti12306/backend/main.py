@@ -22,6 +22,17 @@
 
 REPLAY_TIMEOUT = 15
 
+import platform
+import sys
+
+
+if platform.system() != 'Linux':
+    print("Our software only allowed to be run on Linux. Exit now.")
+    sys.exit(99)
+else:
+    pass
+
+
 from flask import Flask, jsonify, request, make_response, abort
 from dbop import *
 from respmodel import *
