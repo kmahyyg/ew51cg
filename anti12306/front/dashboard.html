@@ -104,7 +104,7 @@
 
             <!-- Page Content -->
             <div class="alert alert-dismissible alert-danger" id="alertAfterFailed" role="alert" style="display: none;">
-                <strong id="alertInfo">Failed to fetch, Please check your network connection.</strong>
+                <strong id="alertInfo">Failed to fetch, Session Token Expired. Redirect you to login.</strong>
             </div>
             <div class="card">
                 <h5 class="card-header">User Information</h5>
@@ -248,7 +248,11 @@
                 console.log(dataresp);
                 console.log("Failed to fetch.");
                 document.getElementById('alertAfterFailed').style.display = null;
-            })
+            	setTimeout(function (){
+			logoutCleanup();
+			window.location = '/login.html';
+		},3000)
+	    })
     });
 </script>
 </body>
