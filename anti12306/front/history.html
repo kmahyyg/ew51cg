@@ -223,7 +223,11 @@
             .fail(function (dataresp) {
                 console.log("Failed to fetch.");
                 console.log(dataresp);
-                setTimeout(function(){alert("Please check your internet connection.");}, 3000);
+                setTimeout(function(){
+			alert("Fetch failed, Session expired. Relogin Please.");
+                        logoutCleanup();
+			window.location = '/login.html';
+		}, 3000);
             })
     })
 </script>

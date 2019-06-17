@@ -192,11 +192,14 @@ def logout():
                 db_session.delete(now_sess)
                 db_session.commit()
                 return make_response('', 200)
-            except NoResultFound:
-                pass
-            except MultipleResultsFound:
-                pass
-            except InvalidRequestError:
+            except NoResultFound as e:
+                print(e)
+                return make_response('', 500)
+            except MultipleResultsFound as e:
+                print(e)
+                return make_response('', 503)
+            except InvalidRequestError as e:
+                print(e)
                 db_session.rollback()
                 db_session.commit()
         except KeyError:
